@@ -7,6 +7,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const imgUrl = (img) =>
+  img?.startsWith("http") ? img : `${VITE_API_URL}${img}`;
 
 const ProductCard = ({ product, onOpenAuth }) => {
   const { user } = useAuth();
@@ -16,12 +18,8 @@ const ProductCard = ({ product, onOpenAuth }) => {
   const [sizePopover, setSizePopover] = useState(false);
   const [adding, setAdding] = useState(false);
 
-  const primaryImage = product.images?.[0]
-    ? `${VITE_API_URL}${product.images[0]}`
-    : null;
-  const secondImage = product.images?.[1]
-    ? `${VITE_API_URL}${product.images[1]}`
-    : null;
+  const primaryImage = product.images?.[0] ? imgUrl(product.images[0]) : null;
+  const secondImage = product.images?.[1] ? imgUrl(product.images[1]) : null;
 
   const handleCardClick = () => navigate(`/product/${product._id}`);
 

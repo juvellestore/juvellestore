@@ -19,6 +19,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 import api from "../api/axios.js";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const imgUrl = (img) =>
+  img?.startsWith("http") ? img : `${VITE_API_URL}${img}`;
 const SIZES = ["S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
 const ORDER_STATUSES = [
   "active",
@@ -110,7 +112,7 @@ const ProductFormModal = ({ product, onClose, onSaved }) => {
   });
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState(
-    product?.images?.map((img) => `${VITE_API_URL}${img}`) || [],
+    product?.images?.map((img) => imgUrl(img)) || [],
   );
   const [loading, setLoading] = useState(false);
   const fileRef = useRef();
@@ -686,7 +688,7 @@ const AdminDashboard = () => {
                     >
                       {p.images?.[0] && (
                         <img
-                          src={`${VITE_API_URL}${p.images[0]}`}
+                          src={imgUrl(p.images[0])}
                           alt={p.productName}
                           style={{
                             width: "48px",

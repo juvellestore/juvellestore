@@ -7,6 +7,8 @@ import Navbar from "../components/Navbar.jsx";
 import { useCart } from "../context/CartContext.jsx";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const imgUrl = (img) =>
+  img?.startsWith("http") ? img : `${VITE_API_URL}${img}`;
 
 const CartPage = () => {
   const { cartItems, cartCount, updateQty, removeItem } = useCart();
@@ -127,7 +129,7 @@ const CartPage = () => {
               {cartItems.map((item) => {
                 const product = item.productId;
                 const imgSrc = product?.images?.[0]
-                  ? `${VITE_API_URL}${product.images[0]}`
+                  ? imgUrl(product.images[0])
                   : null;
                 return (
                   <motion.div

@@ -10,6 +10,8 @@ import { useCart } from "../context/CartContext.jsx";
 import api from "../api/axios.js";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const imgUrl = (img) =>
+  img?.startsWith("http") ? img : `${VITE_API_URL}${img}`;
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -86,9 +88,7 @@ const ProductPage = () => {
   if (!product) return null;
 
   const images =
-    product.images?.length > 0
-      ? product.images.map((img) => `${VITE_API_URL}${img}`)
-      : [];
+    product.images?.length > 0 ? product.images.map((img) => imgUrl(img)) : [];
 
   return (
     <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
