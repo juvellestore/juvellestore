@@ -1,0 +1,1040 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiPackage,
+  FiUsers,
+  FiShoppingBag,
+  FiDollarSign,
+  FiPlus,
+  FiEdit2,
+  FiTrash2,
+  FiX,
+  FiChevronDown,
+  FiChevronUp,
+} from "react-icons/fi";
+import { toast } from "sonner";
+import Navbar from "../components/Navbar.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import api from "../api/axios.js";
+
+const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const SIZES = ["S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
+const ORDER_STATUSES = [
+  "active",
+  "processing",
+  "shipped",
+  "fulfilled",
+  "cancelled",
+];
+const STATUS_COLORS = {
+  active: "#cf9db8",
+  processing: "#9d7c85",
+  shipped: "#7b5ea7",
+  fulfilled: "#4a7c59",
+  cancelled: "#7c4a4a",
+};
+
+const StatCard = ({ icon: Icon, label, value, color }) => (
+  <div
+    style={{
+      background: "#413038",
+      borderRadius: "8px",
+      padding: "1.25rem 1.5rem",
+      border: "1px solid rgba(207,157,184,0.15)",
+      display: "flex",
+      alignItems: "center",
+      gap: "1rem",
+    }}
+  >
+    <div
+      style={{
+        background: color || "#553858",
+        borderRadius: "8px",
+        padding: "12px",
+        display: "flex",
+      }}
+    >
+      <Icon size={22} color="#f3e6ec" />
+    </div>
+    <div>
+      <p
+        style={{
+          color: "#cf9db8",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "0.75rem",
+          margin: "0 0 2px",
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+        }}
+      >
+        {label}
+      </p>
+      <p
+        style={{
+          color: "#f3e6ec",
+          fontFamily: "Montserrat, sans-serif",
+          fontWeight: 700,
+          fontSize: "1.4rem",
+          margin: 0,
+        }}
+      >
+        {value}
+      </p>
+    </div>
+  </div>
+);
+
+const inputCls = {
+  width: "100%",
+  background: "#2e1f24",
+  border: "1px solid rgba(207,157,184,0.3)",
+  color: "#f3e6ec",
+  borderRadius: "6px",
+  padding: "9px 12px",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "0.85rem",
+  outline: "none",
+  boxSizing: "border-box",
+};
+
+const ProductFormModal = ({ product, onClose, onSaved }) => {
+  const [form, setForm] = useState({
+    productName: product?.productName || "",
+    description: product?.description || "",
+    price: product?.price || "",
+    originalPrice: product?.originalPrice || "",
+    sizes: product?.sizes || [],
+    inStock: product?.inStock ?? true,
+    featured: product?.featured ?? false,
+  });
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState(
+    product?.images?.map((img) => `${VITE_API_URL}${img}`) || [],
+  );
+  const [loading, setLoading] = useState(false);
+  const fileRef = useRef();
+
+  const toggleSize = (s) =>
+    setForm((p) => ({
+      ...p,
+      sizes: p.sizes.includes(s)
+        ? p.sizes.filter((x) => x !== s)
+        : [...p.sizes, s],
+    }));
+
+  const handleFiles = (e) => {
+    const selected = Array.from(e.target.files);
+    setFiles(selected);
+    setPreviews(selected.map((f) => URL.createObjectURL(f)));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => {
+        if (k === "sizes") fd.append(k, JSON.stringify(v));
+        else fd.append(k, v);
+      });
+      files.forEach((f) => fd.append("images", f));
+
+      if (product) {
+        await api.put(`/api/products/${product._id}`, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Product updated!");
+      } else {
+        await api.post("/api/products", fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Product created!");
+      }
+      onSaved();
+      onClose();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to save product");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(46,31,36,0.8)",
+        backdropFilter: "blur(4px)",
+        zIndex: 50,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+        overflowY: "auto",
+      }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.92 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.92 }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#2e1f24",
+          border: "1px solid rgba(207,157,184,0.3)",
+          borderRadius: "12px",
+          padding: "1.5rem",
+          width: "100%",
+          maxWidth: "540px",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1.25rem",
+          }}
+        >
+          <h2
+            style={{
+              color: "#f3e6ec",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: 700,
+              fontSize: "1.1rem",
+              margin: 0,
+            }}
+          >
+            {product ? "Edit Product" : "Add New Product"}
+          </h2>
+          <button
+            onClick={onClose}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#cf9db8",
+              cursor: "pointer",
+            }}
+          >
+            <FiX size={20} />
+          </button>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+        >
+          <input
+            style={inputCls}
+            placeholder="Product Name *"
+            value={form.productName}
+            onChange={(e) =>
+              setForm((p) => ({ ...p, productName: e.target.value }))
+            }
+            required
+          />
+          <textarea
+            style={{ ...inputCls, minHeight: "72px", resize: "vertical" }}
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) =>
+              setForm((p) => ({ ...p, description: e.target.value }))
+            }
+          />
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "10px",
+            }}
+          >
+            <input
+              style={inputCls}
+              type="number"
+              placeholder="Price (₹) *"
+              value={form.price}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, price: e.target.value }))
+              }
+              required
+            />
+            <input
+              style={inputCls}
+              type="number"
+              placeholder="Original Price (₹)"
+              value={form.originalPrice}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, originalPrice: e.target.value }))
+              }
+            />
+          </div>
+
+          {/* Sizes */}
+          <div>
+            <p
+              style={{
+                color: "#cf9db8",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                margin: "0 0 6px",
+              }}
+            >
+              Sizes
+            </p>
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              {SIZES.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSize(s)}
+                  style={{
+                    padding: "5px 12px",
+                    borderRadius: "4px",
+                    border: "1px solid",
+                    borderColor: form.sizes.includes(s)
+                      ? "#553858"
+                      : "rgba(207,157,184,0.3)",
+                    background: form.sizes.includes(s)
+                      ? "#553858"
+                      : "transparent",
+                    color: form.sizes.includes(s) ? "#f3e6ec" : "#cf9db8",
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "0.8rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Toggles */}
+          <div style={{ display: "flex", gap: "16px" }}>
+            {[
+              ["inStock", "In Stock"],
+              ["featured", "Featured"],
+            ].map(([key, label]) => (
+              <label
+                key={key}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  cursor: "pointer",
+                  color: "#cf9db8",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "0.85rem",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={form[key]}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, [key]: e.target.checked }))
+                  }
+                  style={{
+                    accentColor: "#553858",
+                    width: "16px",
+                    height: "16px",
+                  }}
+                />
+                {label}
+              </label>
+            ))}
+          </div>
+
+          {/* Images */}
+          <div>
+            <p
+              style={{
+                color: "#cf9db8",
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                margin: "0 0 6px",
+              }}
+            >
+              Images (up to 5)
+            </p>
+            <button
+              type="button"
+              onClick={() => fileRef.current.click()}
+              style={{
+                background: "#413038",
+                color: "#cf9db8",
+                border: "1px dashed rgba(207,157,184,0.4)",
+                borderRadius: "6px",
+                padding: "10px",
+                width: "100%",
+                cursor: "pointer",
+                fontFamily: "Poppins, sans-serif",
+                fontSize: "0.85rem",
+              }}
+            >
+              Click to select images
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFiles}
+              style={{ display: "none" }}
+            />
+            {previews.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  marginTop: "8px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {previews.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt=""
+                    style={{
+                      width: "64px",
+                      height: "80px",
+                      objectFit: "cover",
+                      borderRadius: "4px",
+                      border: "1px solid rgba(207,157,184,0.3)",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            style={{
+              background: loading ? "#413038" : "#553858",
+              color: "#f3e6ec",
+              border: "none",
+              borderRadius: "2px",
+              padding: "11px",
+              fontFamily: "Montserrat, sans-serif",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
+          >
+            {loading
+              ? "Saving…"
+              : product
+                ? "Update Product"
+                : "Create Product"}
+          </button>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+const AdminDashboard = () => {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  const [tab, setTab] = useState("products");
+  const [stats, setStats] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [productModal, setProductModal] = useState(null); // null | 'new' | product object
+  const [expandedOrder, setExpandedOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user || user.role !== "admin") navigate("/");
+    }
+  }, [user, authLoading, navigate]);
+
+  const loadData = async () => {
+    try {
+      const [statsRes, productsRes, ordersRes] = await Promise.all([
+        api.get("/api/admin/stats"),
+        api.get("/api/products"),
+        api.get("/api/admin/orders"),
+      ]);
+      setStats(statsRes.data.stats);
+      setProducts(productsRes.data.products);
+      setOrders(ordersRes.data.orders);
+    } catch {
+      toast.error("Failed to load admin data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleDeleteProduct = async (id) => {
+    try {
+      await api.delete(`/api/products/${id}`);
+      setProducts((p) => p.filter((x) => x._id !== id));
+      toast.success("Product deleted");
+      setConfirmDelete(null);
+    } catch {
+      toast.error("Failed to delete");
+    }
+  };
+
+  const handleStatusChange = async (orderId, status) => {
+    try {
+      await api.put(`/api/admin/orders/${orderId}`, { orderStatus: status });
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.orderId === orderId ? { ...o, orderStatus: status } : o,
+        ),
+      );
+      toast.success("Order status updated");
+    } catch {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const tabStyle = (active) => ({
+    padding: "8px 20px",
+    borderRadius: "6px 6px 0 0",
+    border: "none",
+    background: active ? "#413038" : "transparent",
+    color: active ? "#f3e6ec" : "#cf9db8",
+    fontFamily: "Inter, sans-serif",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    cursor: "pointer",
+  });
+
+  if (loading)
+    return (
+      <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+        <Navbar />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "80vh",
+          }}
+        >
+          <span style={{ color: "#cf9db8", fontFamily: "Poppins, sans-serif" }}>
+            Loading admin data…
+          </span>
+        </div>
+      </div>
+    );
+
+  return (
+    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+      <Navbar />
+      <div
+        style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem" }}
+      >
+        <h1
+          style={{
+            color: "#f3e6ec",
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(1.4rem, 4vw, 2rem)",
+            margin: "0 0 1.5rem",
+          }}
+        >
+          Admin Dashboard
+        </h1>
+
+        {/* Stats */}
+        {stats && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+              gap: "1rem",
+              marginBottom: "2rem",
+            }}
+          >
+            <StatCard
+              icon={FiPackage}
+              label="Products"
+              value={stats.totalProducts}
+              color="#553858"
+            />
+            <StatCard
+              icon={FiShoppingBag}
+              label="Active Orders"
+              value={stats.activeOrders}
+              color="#413038"
+            />
+            <StatCard
+              icon={FiUsers}
+              label="Users"
+              value={stats.totalUsers}
+              color="#413038"
+            />
+            <StatCard
+              icon={FiDollarSign}
+              label="Revenue (₹)"
+              value={`₹${stats.totalRevenue.toLocaleString("en-IN")}`}
+              color="#4a7c59"
+            />
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div
+          style={{
+            display: "flex",
+            borderBottom: "1px solid rgba(207,157,184,0.2)",
+          }}
+        >
+          <button
+            style={tabStyle(tab === "products")}
+            onClick={() => setTab("products")}
+          >
+            Products
+          </button>
+          <button
+            style={tabStyle(tab === "orders")}
+            onClick={() => setTab("orders")}
+          >
+            Orders
+          </button>
+        </div>
+
+        <div
+          style={{
+            background: "#413038",
+            borderRadius: "0 8px 8px 8px",
+            padding: "1.5rem",
+            border: "1px solid rgba(207,157,184,0.2)",
+          }}
+        >
+          {/* Products tab */}
+          {tab === "products" && (
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginBottom: "1rem",
+                }}
+              >
+                <button
+                  onClick={() => setProductModal("new")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    background: "#553858",
+                    color: "#f3e6ec",
+                    border: "none",
+                    borderRadius: "2px",
+                    padding: "8px 16px",
+                    fontFamily: "Montserrat, sans-serif",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  <FiPlus size={16} /> Add Product
+                </button>
+              </div>
+
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
+                {products.length === 0 ? (
+                  <p
+                    style={{
+                      color: "#cf9db8",
+                      fontFamily: "Poppins, sans-serif",
+                      textAlign: "center",
+                      padding: "2rem 0",
+                    }}
+                  >
+                    No products yet.
+                  </p>
+                ) : (
+                  products.map((p) => (
+                    <div
+                      key={p._id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        background: "#2e1f24",
+                        borderRadius: "6px",
+                        padding: "10px 14px",
+                        border: "1px solid rgba(207,157,184,0.1)",
+                      }}
+                    >
+                      {p.images?.[0] && (
+                        <img
+                          src={`${VITE_API_URL}${p.images[0]}`}
+                          alt={p.productName}
+                          style={{
+                            width: "48px",
+                            height: "64px",
+                            objectFit: "cover",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      )}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p
+                          style={{
+                            color: "#f3e6ec",
+                            fontFamily: "Montserrat, sans-serif",
+                            fontWeight: 600,
+                            fontSize: "0.875rem",
+                            margin: "0 0 2px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {p.productName}
+                        </p>
+                        <p
+                          style={{
+                            color: "#cf9db8",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.75rem",
+                            margin: 0,
+                          }}
+                        >
+                          ₹{p.price.toLocaleString("en-IN")}{" "}
+                          {p.featured && "• Featured"}{" "}
+                          {!p.inStock && "• Out of Stock"}
+                        </p>
+                      </div>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <button
+                          onClick={() => setProductModal(p)}
+                          style={{
+                            background: "none",
+                            border: "1px solid rgba(207,157,184,0.3)",
+                            color: "#cf9db8",
+                            borderRadius: "4px",
+                            padding: "6px 10px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FiEdit2 size={14} />
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete(p._id)}
+                          style={{
+                            background: "none",
+                            border: "1px solid rgba(124,74,74,0.5)",
+                            color: "#7c4a4a",
+                            borderRadius: "4px",
+                            padding: "6px 10px",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FiTrash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Orders tab */}
+          {tab === "orders" && (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+            >
+              {orders.length === 0 ? (
+                <p
+                  style={{
+                    color: "#cf9db8",
+                    fontFamily: "Poppins, sans-serif",
+                    textAlign: "center",
+                    padding: "2rem 0",
+                  }}
+                >
+                  No orders yet.
+                </p>
+              ) : (
+                orders.map((order) => (
+                  <div
+                    key={order.orderId}
+                    style={{
+                      border: "1px solid rgba(207,157,184,0.1)",
+                      borderRadius: "8px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      onClick={() =>
+                        setExpandedOrder(
+                          expandedOrder === order.orderId
+                            ? null
+                            : order.orderId,
+                        )
+                      }
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        flexWrap: "wrap",
+                        padding: "10px 14px",
+                        cursor: "pointer",
+                        background: "#2e1f24",
+                      }}
+                    >
+                      <div style={{ flex: 1, minWidth: "160px" }}>
+                        <p
+                          style={{
+                            color: "#f3e6ec",
+                            fontFamily: "Montserrat, sans-serif",
+                            fontWeight: 600,
+                            fontSize: "0.82rem",
+                            margin: "0 0 2px",
+                          }}
+                        >
+                          #{order.orderId.slice(-8).toUpperCase()}
+                        </p>
+                        <p
+                          style={{
+                            color: "#cf9db8",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.72rem",
+                            margin: 0,
+                          }}
+                        >
+                          {order.userId?.fullName || order.fullName} •{" "}
+                          {new Date(order.orderDate).toLocaleDateString(
+                            "en-IN",
+                          )}
+                        </p>
+                      </div>
+                      <span
+                        style={{
+                          color: "#f3e6ec",
+                          fontFamily: "Montserrat, sans-serif",
+                          fontWeight: 600,
+                          fontSize: "0.85rem",
+                        }}
+                      >
+                        ₹{order.amount.toLocaleString("en-IN")}
+                      </span>
+                      {/* Status dropdown */}
+                      <select
+                        value={order.orderStatus}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleStatusChange(order.orderId, e.target.value);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          background: STATUS_COLORS[order.orderStatus],
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "20px",
+                          padding: "3px 10px",
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "0.75rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {ORDER_STATUSES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                      {expandedOrder === order.orderId ? (
+                        <FiChevronUp color="#cf9db8" size={16} />
+                      ) : (
+                        <FiChevronDown color="#cf9db8" size={16} />
+                      )}
+                    </div>
+                    {expandedOrder === order.orderId && (
+                      <motion.div
+                        initial={{ height: 0 }}
+                        animate={{ height: "auto" }}
+                        style={{
+                          padding: "12px 14px",
+                          borderTop: "1px solid rgba(207,157,184,0.1)",
+                        }}
+                      >
+                        {order.items.map((item, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            <span
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                              }}
+                            >
+                              {item.productName} ({item.size}) × {item.quantity}
+                            </span>
+                            <span
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Montserrat, sans-serif",
+                                fontSize: "0.8rem",
+                              }}
+                            >
+                              ₹
+                              {(
+                                item.priceAtOrder * item.quantity
+                              ).toLocaleString("en-IN")}
+                            </span>
+                          </div>
+                        ))}
+                        <p
+                          style={{
+                            color: "#cf9db8",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.75rem",
+                            marginTop: "8px",
+                          }}
+                        >
+                          📍 {order.address}
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Product form modal */}
+      <AnimatePresence>
+        {productModal && (
+          <ProductFormModal
+            product={productModal === "new" ? null : productModal}
+            onClose={() => setProductModal(null)}
+            onSaved={loadData}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Delete confirm */}
+      <AnimatePresence>
+        {confirmDelete && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(46,31,36,0.8)",
+              zIndex: 60,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                background: "#2e1f24",
+                border: "1px solid rgba(207,157,184,0.3)",
+                borderRadius: "10px",
+                padding: "1.5rem",
+                maxWidth: "340px",
+                textAlign: "center",
+              }}
+            >
+              <h3
+                style={{
+                  color: "#f3e6ec",
+                  fontFamily: "Montserrat, sans-serif",
+                  fontWeight: 700,
+                  margin: "0 0 8px",
+                }}
+              >
+                Delete Product?
+              </h3>
+              <p
+                style={{
+                  color: "#cf9db8",
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: "0.875rem",
+                  margin: "0 0 1.25rem",
+                }}
+              >
+                This cannot be undone.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={() => setConfirmDelete(null)}
+                  style={{
+                    background: "#413038",
+                    color: "#f3e6ec",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "8px 18px",
+                    cursor: "pointer",
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteProduct(confirmDelete)}
+                  style={{
+                    background: "#7c4a4a",
+                    color: "#f3e6ec",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "8px 18px",
+                    cursor: "pointer",
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default AdminDashboard;

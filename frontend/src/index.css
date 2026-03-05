@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:ital,wght@0,200;0,300;0,400;0,600;0,700;1,300;1,400&family=Poppins:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap");
+
+@import "tailwindcss";
+
+html {
+  /* Resetting the default box-sizing for better consistency */
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 16px;
+  /* Prevent bounce/overscroll revealing page background on mobile */
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+@theme {
+  --color-ivory-blush: #f3e6ec;
+  --color-velvet-rose-mist: #cf9db8;
+  --color-royal-plum-veil: #553858;
+  --color-cocoa-orchid: #413038;
+  --color-midnight-truffle: #2e1f24;
+
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+/* Font utilities */
+.font-montserrat {
+  font-family: "Montserrat", sans-serif;
+}
+.font-poppins {
+  font-family: "Poppins", sans-serif;
+}
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+/* Animated underline for navbar Home / Store links */
+.nav-underline-link {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.nav-underline {
+  display: block;
+  height: 2px;
+  width: 0;
+  background-color: #f3e6ec; /* ivory-blush */
+  border-radius: 1px;
+  transition: width 0.25s ease;
+}
+
+.nav-underline-link:hover .nav-underline {
+  width: 100%;
+}
