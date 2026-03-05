@@ -1,9 +1,29 @@
+import { v2 as cloudinary } from "cloudinary";
 import Product from "../models/Product.js";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Upload a single file buffer to Cloudinary, returns the secure URL
+const uploadToCloudinary = (buffer) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "juvelle" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url);
+      },
+    );
+    stream.end(buffer);
+  });
 
 // GET /api/products
 export const getProducts = async (req, res) => {
   const { sort } = req.query;
-  let sortOption = { createdAt: -1 }; // default: newest
+  let sortOption = { createdAt: -1 };
   if (sort === "price_asc") sortOption = { price: 1 };
   else if (sort === "price_desc") sortOption = { price: -1 };
   else if (sort === "featured") sortOption = { featured: -1, createdAt: -1 };
@@ -34,14 +54,17 @@ export const createProduct = async (req, res) => {
     inStock,
     featured,
   } = req.body;
+
   if (!productName || !price)
     return res
       .status(400)
       .json({ success: false, message: "productName and price are required" });
 
-  const images = req.files
-    ? req.files.map((f) => `/uploads/${f.filename}`)
+  // Upload all images to Cloudinary
+  const images = req.files?.length
+    ? await Promise.all(req.files.map((f) => uploadToCloudinary(f.buffer)))
     : [];
+
   const parsedSizes =
     typeof sizes === "string" ? JSON.parse(sizes) : sizes || [];
 
@@ -73,6 +96,7 @@ export const updateProduct = async (req, res) => {
     inStock,
     featured,
   } = req.body;
+
   const update = {};
   if (productName) update.productName = productName.trim();
   if (description !== undefined) update.description = description.trim();
@@ -86,8 +110,13 @@ export const updateProduct = async (req, res) => {
     update.inStock = inStock === "true" || inStock === true;
   if (featured !== undefined)
     update.featured = featured === "true" || featured === true;
-  if (req.files && req.files.length > 0)
-    update.images = req.files.map((f) => `/uploads/${f.filename}`);
+
+  // Upload new images to Cloudinary if provided
+  if (req.files?.length) {
+    update.images = await Promise.all(
+      req.files.map((f) => uploadToCloudinary(f.buffer)),
+    );
+  }
 
   const product = await Product.findByIdAndUpdate(req.params.id, update, {
     new: true,
@@ -96,6 +125,7 @@ export const updateProduct = async (req, res) => {
     return res
       .status(404)
       .json({ success: false, message: "Product not found" });
+
   res.json({ success: true, product });
 };
 

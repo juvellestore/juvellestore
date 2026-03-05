@@ -1,7 +1,5 @@
 import express from "express";
 import multer from "multer";
-import path from "path";
-import { fileURLToPath } from "url";
 import {
   getProducts,
   getProduct,
@@ -12,26 +10,11 @@ import {
 import { verifyToken, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, "../uploads"),
-  filename: (req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    cb(null, `${unique}${path.extname(file.originalname)}`);
-  },
-});
-const fileFilter = (req, file, cb) => {
-  const allowed = [".webp", ".jpg", ".jpeg", ".png"];
-  if (allowed.includes(path.extname(file.originalname).toLowerCase()))
-    cb(null, true);
-  else cb(new Error("Only image files allowed"));
-};
+// multer 2.x: use memoryStorage — files go to Cloudinary, not disk
 const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 router.get("/", getProducts);
