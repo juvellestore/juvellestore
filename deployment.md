@@ -1,23 +1,22 @@
 # Juvelle — Deployment Guide
 
-**Backend** → [Render](https://render.com) (persistent Node.js server) and
+**Backend** → [Vercel](https://vercel.com) (serverless Node.js, always-on)
 **Frontend** → [Vercel](https://vercel.com) (static Vite/React)
+**Images** → [Cloudinary](https://cloudinary.com) _(to be set up separately)_
 
 ---
 
 ## Prerequisites
 
-- A [Render account](https://render.com) (free tier works)
-- A [Vercel account](https://vercel.com/signup) (free tier works)
-- The project pushed to a **GitHub repository**
-- Your MongoDB Atlas cluster already running
+- A [Vercel account](https://vercel.com/signup) (free tier)
+- Project pushed to a **GitHub repository**
+- MongoDB Atlas cluster running
 
 ---
 
 ## Step 1 — Push to GitHub
 
 ```bash
-# From the root juvelle/ folder
 git init
 git add .
 git commit -m "initial commit"
@@ -25,63 +24,68 @@ git remote add origin <repo_git_url>
 git push -u origin main
 ```
 
-> `.env` files are already in `.gitignore`. Never commit secrets.
+> `.env` files are in `.gitignore`. Never commit secrets.
 
 ---
 
-## Part A — Deploy the Backend on Render
+## Part A — Deploy the Backend on Vercel
 
-Render runs your Express server as a persistent process, which means file uploads and long-running connections work as expected.
+### Step 2 — Add `vercel.json` to the backend
 
-### Step 2 — Create a New Web Service on Render
+Create `backend/vercel.json`:
 
-1. Go to [dashboard.render.com](https://dashboard.render.com) → **New +** → **Web Service**
-2. Connect your GitHub account and select the `juvelle` repository
-3. Configure the service:
+```json
+{
+  "version": 2,
+  "builds": [{ "src": "server.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "server.js" }]
+}
+```
 
-| Setting            | Value                           |
-| ------------------ | ------------------------------- |
-| **Name**           | `juvelle-backend` (or any name) |
-| **Root Directory** | `backend`                       |
-| **Runtime**        | `Node`                          |
-| **Build Command**  | `npm install`                   |
-| **Start Command**  | `npm start`                     |
-| **Instance Type**  | Free                            |
+Commit and push:
 
-4. Click **Create Web Service**
+```bash
+git add backend/vercel.json
+git commit -m "add vercel config for backend"
+git push
+```
 
-### Step 3 — Set Backend Environment Variables on Render
+### Step 3 — Import the backend on Vercel
 
-On the service page, go to **Environment** and add:
+1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
+2. Select your `juvelle` repository
+3. Set **Root Directory** to `backend`
+4. Framework Preset: **Other**
+5. Build Command: _(leave blank)_
+6. Output Directory: _(leave blank)_
+7. Before clicking Deploy, go to **Environment Variables** and add:
 
-| Variable        | Value                                           |
-| --------------- | ----------------------------------------------- |
-| `MONGODB_URI`   | `mongodb+srv://:...` (your full Atlas URI)      |
-| `JWT_SECRET`    | `xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`              |
-| `NODE_ENV`      | `production`                                    |
-| `CLIENT_ORIGIN` | _(your frontend Vercel URL — add after Step 7)_ |
+| Variable        | Value                                                              |
+| --------------- | ------------------------------------------------------------------ |
+| `MONGODB_URI`   | your full Atlas connection string                                  |
+| `JWT_SECRET`    | your secret key                                                    |
+| `NODE_ENV`      | `production`                                                       |
+| `CLIENT_ORIGIN` | _(your frontend Vercel URL — add after Step 6, no trailing slash)_ |
 
-Render will automatically redeploy when you save env vars.
+8. Click **Deploy**
 
 ### Step 4 — Note your Backend URL
 
-After the deploy succeeds, copy the URL from the top of the service page. It will look like:
+Copy the URL from your Vercel backend project dashboard:
 
 ```
-https://juvelle-backend.onrender.com
+https://juvelle-backend.vercel.app
 ```
 
 You will need this in Step 6.
-
-> **Free tier note**: Render's free plan spins down the service after 15 minutes of inactivity. The first request after sleep takes ~30 seconds to wake up. Upgrade to a paid plan to avoid this.
 
 ---
 
 ## Part B — Deploy the Frontend on Vercel
 
-### Step 5 — Add `vercel.json` for SPA Routing
+### Step 5 — Add `vercel.json` for SPA routing
 
-Without this, refreshing any page (e.g. `/store`, `/product/123`) returns a 404 because Vercel doesn't know to serve `index.html` for client-side routes.
+Without this, refreshing any route (e.g. `/store`) returns a 404.
 
 Create `frontend/vercel.json`:
 
@@ -99,50 +103,52 @@ git commit -m "add vercel SPA rewrite for frontend"
 git push
 ```
 
-### Step 6 — Import the Frontend on Vercel
+### Step 6 — Import the frontend on Vercel
 
-1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
-2. Select your `juvelle` repository
-3. Set the **Root Directory** to `frontend`
-4. Framework Preset: **Vite** (auto-detected)
-5. Build Command: `npm run build` _(auto-filled)_
-6. Output Directory: `dist` _(auto-filled)_
-7. Before clicking Deploy, go to **Environment Variables** and add:
+1. Go to [vercel.com/new](https://vercel.com/new) → import the same repo again
+2. Set **Root Directory** to `frontend`
+3. Framework Preset: **Vite** (auto-detected)
+4. Before clicking Deploy, add **Environment Variables**:
 
 | Variable       | Value                                                                 |
 | -------------- | --------------------------------------------------------------------- |
-| `VITE_API_URL` | `https://juvelle-backend.onrender.com` (your backend URL from Step 4) |
+| `VITE_API_URL` | `https://juvelle-backend.vercel.app` (from Step 4, no trailing slash) |
 
-> Variable names **must** start with `VITE_` to be exposed by Vite at build time.
+5. Click **Deploy**
 
-8. Click **Deploy**
+### Step 7 — Update `CLIENT_ORIGIN` on the Backend
 
-### Step 7 — Update `CLIENT_ORIGIN` on Render
+Go to your **backend** Vercel project → **Settings → Environment Variables** and set:
 
-Now that the frontend URL is known, go back to your **Render** service → **Environment** and update:
+| Variable        | Value                                                                       |
+| --------------- | --------------------------------------------------------------------------- |
+| `CLIENT_ORIGIN` | `https://juvellestore.vercel.app` _(exact frontend URL, no trailing slash)_ |
 
-| Variable        | Value                                                     |
-| --------------- | --------------------------------------------------------- |
-| `CLIENT_ORIGIN` | `https://juvelle.vercel.app` _(your actual frontend URL)_ |
-
-Render will redeploy automatically so CORS allows requests from your frontend.
+Then go to **Deployments → Redeploy** (uncheck "Use existing Build Cache").
 
 ---
 
 ## MongoDB Atlas — Allow All IPs
 
-Since Render's IPs can change, allow connections from anywhere in Atlas:
+Vercel's serverless IPs change constantly, so allow all connections:
 
-1. Go to Atlas → **Network Access** → **Add IP Address**
+1. Atlas → **Network Access** → **Add IP Address**
 2. Select **"Allow Access from Anywhere"** (`0.0.0.0/0`)
+
+---
+
+## ⚠️ Image Uploads — Cloudinary Required
+
+Vercel is stateless — files saved to disk (`/uploads`) are lost after each function call. You **must** use Cloudinary for product image storage. See the Cloudinary setup guide when ready.
 
 ---
 
 ## Final Checklist
 
-- Project pushed to GitHub
-- `frontend/vercel.json` created and pushed
-- Backend deployed on Render with all env vars set
-- Frontend deployed on Vercel with `VITE_API_URL` pointing to Render backend
-- `CLIENT_ORIGIN` on Render updated to frontend Vercel URL
-- Atlas Network Access set to `0.0.0.0/0`
+- [ ] `backend/vercel.json` created and pushed
+- [ ] `frontend/vercel.json` created and pushed
+- [ ] Backend deployed on Vercel with all env vars set
+- [ ] Frontend deployed on Vercel with `VITE_API_URL` pointing to backend
+- [ ] `CLIENT_ORIGIN` on backend updated to frontend URL (**no trailing slash**)
+- [ ] Atlas Network Access set to `0.0.0.0/0`
+- [ ] _(Later)_ Cloudinary set up for image uploads
