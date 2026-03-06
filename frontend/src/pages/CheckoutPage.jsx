@@ -97,7 +97,7 @@ const CheckoutPage = () => {
         amount: data.amount,
         currency: data.currency,
         name: "Juvelle",
-        description: "Test Transaction for Juvelle Store",
+        description: `Order ${data.razorpayOrderId}`,
         order_id: data.razorpayOrderId,
         handler: async function (response) {
           try {

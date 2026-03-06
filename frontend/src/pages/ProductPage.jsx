@@ -542,18 +542,6 @@ const ProductPage = () => {
                 </button>
               )}
             </div>
-
-            <p
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Poppins, sans-serif",
-                fontSize: "0.75rem",
-                marginTop: "16px",
-              }}
-            >
-              📦 You will be contacted for payment details after placing your
-              order.
-            </p>
           </div>
         </div>
       </div>
