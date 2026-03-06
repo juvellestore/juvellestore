@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { FiShoppingCart, FiChevronDown } from "react-icons/fi";
 import { toast } from "sonner";
@@ -55,7 +56,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       whileHover={{ y: -4 }}
-      style={{ position: "relative", cursor: "pointer" }}
+      className="relative cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
@@ -64,72 +65,32 @@ const ProductCard = ({ product, onOpenAuth }) => {
     >
       <div
         onClick={handleCardClick}
-        style={{
-          background: "#413038",
-          borderRadius: "8px",
-          overflow: "hidden",
-          border: "1px solid rgba(207,157,184,0.2)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-          transition: "box-shadow 0.2s",
-        }}
+        className="bg-cocoa-orchid rounded-lg overflow-hidden border border-velvet-rose-mist/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow duration-200"
       >
         {/* Image */}
-        <div
-          style={{
-            position: "relative",
-            aspectRatio: "3/4",
-            overflow: "hidden",
-            background: "#2e1f24",
-          }}
-        >
+        <div className="relative aspect-3/4 overflow-hidden bg-midnight-truffle">
           {primaryImage ? (
             <>
               <img
                 src={primaryImage}
                 alt={product.productName}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  transition: "opacity 0.4s",
-                  opacity: hovered && secondImage ? 0 : 1,
-                  position: "absolute",
-                  inset: 0,
-                }}
+                className={`w-full h-full object-cover transition-opacity duration-400 absolute inset-0 ${
+                  hovered && secondImage ? "opacity-0" : "opacity-100"
+                }`}
               />
               {secondImage && (
                 <img
                   src={secondImage}
                   alt={product.productName}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    transition: "opacity 0.4s",
-                    opacity: hovered ? 1 : 0,
-                    position: "absolute",
-                    inset: 0,
-                  }}
+                  className={`w-full h-full object-cover transition-opacity duration-400 absolute inset-0 ${
+                    hovered ? "opacity-100" : "opacity-0"
+                  }`}
                 />
               )}
             </>
           ) : (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  color: "#cf9db8",
-                  fontFamily: "Poppins, sans-serif",
-                  fontSize: "0.75rem",
-                }}
-              >
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-velvet-rose-mist font-poppins text-xs">
                 No image
               </span>
             </div>
@@ -137,101 +98,39 @@ const ProductCard = ({ product, onOpenAuth }) => {
 
           {/* Featured badge */}
           {product.featured && (
-            <div
-              style={{
-                position: "absolute",
-                top: "8px",
-                left: "8px",
-                background: "rgba(85,56,88,0.85)",
-                backdropFilter: "blur(4px)",
-                color: "#f3e6ec",
-                fontSize: "0.65rem",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 600,
-                padding: "2px 8px",
-                borderRadius: "20px",
-                letterSpacing: "0.05em",
-                textTransform: "uppercase",
-              }}
-            >
+            <div className="absolute top-2 left-2 bg-royal-plum-veil/85 backdrop-blur-xs text-ivory-blush text-[0.65rem] font-inter font-semibold px-2 py-0.5 rounded-[20px] tracking-[0.05em] uppercase">
               Featured
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div style={{ padding: "0.875rem" }}>
-          <h3
-            style={{
-              margin: "0 0 4px",
-              color: "#f3e6ec",
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              lineHeight: 1.3,
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-            }}
-          >
+        <div className="p-3.5">
+          <h3 className="m-0 mb-1 text-ivory-blush font-montserrat font-semibold text-[0.875rem] leading-tight overflow-hidden line-clamp-2">
             {product.productName}
           </h3>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "12px",
-            }}
-          >
-            <span
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 700,
-                fontSize: "1rem",
-              }}
-            >
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-ivory-blush font-montserrat font-bold text-base">
               ₹{product.price.toLocaleString("en-IN")}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span
-                style={{
-                  color: "#cf9db8",
-                  fontFamily: "Poppins, sans-serif",
-                  fontSize: "0.75rem",
-                  textDecoration: "line-through",
-                }}
-              >
+              <span className="text-velvet-rose-mist font-poppins text-xs line-through">
                 ₹{product.originalPrice.toLocaleString("en-IN")}
               </span>
             )}
           </div>
 
           {/* Add to cart button */}
-          <div style={{ position: "relative" }}>
+          <div className="relative">
             <button
               onClick={handleAddToCart}
               disabled={adding || !product.inStock}
-              style={{
-                width: "100%",
-                background: product.inStock ? "rgba(85,56,88,0.9)" : "#413038",
-                color: product.inStock ? "#f3e6ec" : "#cf9db8",
-                border: "1px solid rgba(207,157,184,0.3)",
-                borderRadius: "2px",
-                padding: "8px",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 500,
-                fontSize: "0.8rem",
-                cursor: product.inStock ? "pointer" : "not-allowed",
-                transition: "background 0.2s",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px",
-              }}
+              className={`w-full border border-velvet-rose-mist/30 rounded-sm p-2 font-inter font-medium text-[0.8rem] transition-colors duration-200 flex items-center justify-center gap-1.5 ${
+                product.inStock
+                  ? "bg-royal-plum-veil/90 text-ivory-blush cursor-pointer hover:bg-royal-plum-veil"
+                  : "bg-cocoa-orchid text-velvet-rose-mist cursor-not-allowed"
+              }`}
             >
               {!product.inStock ? (
                 "Out of Stock"
@@ -253,47 +152,16 @@ const ProductCard = ({ product, onOpenAuth }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 4 }}
                   onClick={(e) => e.stopPropagation()}
-                  style={{
-                    position: "absolute",
-                    bottom: "calc(100% + 6px)",
-                    left: 0,
-                    right: 0,
-                    background: "#2e1f24",
-                    border: "1px solid #553858",
-                    borderRadius: "8px",
-                    padding: "8px",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "6px",
-                    zIndex: 10,
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-                  }}
+                  className="absolute bottom-[calc(100%+6px)] left-0 right-0 bg-midnight-truffle border border-royal-plum-veil rounded-lg p-2 flex flex-wrap gap-1.5 z-10 shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
                 >
-                  <span
-                    style={{
-                      width: "100%",
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.7rem",
-                      marginBottom: "2px",
-                    }}
-                  >
+                  <span className="w-full text-velvet-rose-mist font-inter text-[0.7rem] mb-0.5">
                     Select size:
                   </span>
                   {product.sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => handleSelectSize(size)}
-                      style={{
-                        background: "#413038",
-                        color: "#f3e6ec",
-                        border: "1px solid rgba(207,157,184,0.3)",
-                        borderRadius: "4px",
-                        padding: "4px 10px",
-                        fontSize: "0.75rem",
-                        fontFamily: "Inter, sans-serif",
-                        cursor: "pointer",
-                      }}
+                      className="bg-cocoa-orchid text-ivory-blush border border-velvet-rose-mist/30 rounded px-2.5 py-1 text-xs font-inter cursor-pointer hover:bg-cocoa-orchid/80 transition-colors duration-200"
                     >
                       {size}
                     </button>

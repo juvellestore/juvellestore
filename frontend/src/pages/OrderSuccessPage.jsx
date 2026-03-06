@@ -43,32 +43,24 @@ const OrderSuccessPage = () => {
 
   if (authLoading || loading) {
     return (
-      <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+      <div className="bg-midnight-truffle min-h-screen">
         <Navbar />
-        <div style={{ textAlign: "center", padding: "4rem", color: "#f3e6ec" }}>
-          Loading...
-        </div>
+        <div className="text-center p-16 text-ivory-blush">Loading...</div>
       </div>
     );
   }
 
   if (!orderId || !order) {
     return (
-      <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+      <div className="bg-midnight-truffle min-h-screen">
         <Navbar />
-        <div style={{ textAlign: "center", padding: "4rem" }}>
-          <h2
-            style={{ color: "#f3e6ec", fontFamily: "Montserrat, sans-serif" }}
-          >
+        <div className="text-center p-16">
+          <h2 className="text-ivory-blush font-montserrat font-bold text-2xl mb-4">
             Order Not Found
           </h2>
           <Link
             to="/store"
-            style={{
-              color: "#cf9db8",
-              textDecoration: "none",
-              fontFamily: "Inter, sans-serif",
-            }}
+            className="text-velvet-rose-mist no-underline font-inter hover:text-ivory-blush transition-colors"
           >
             ← Return to Store
           </Link>
@@ -78,166 +70,58 @@ const OrderSuccessPage = () => {
   }
 
   return (
-    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+    <div className="bg-midnight-truffle min-h-screen">
       <Navbar />
-      <div
-        className="max-w-[600px] w-full mx-auto my-8 sm:my-12 p-6 sm:p-8 text-center"
-        style={{
-          background: "#413038",
-          borderRadius: "8px",
-          border: "1px solid rgba(207,157,184,0.2)",
-        }}
-      >
-        <div
-          style={{
-            width: "60px",
-            height: "60px",
-            borderRadius: "50%",
-            background: "#553858",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 1.5rem",
-          }}
-        >
-          <span style={{ fontSize: "2rem" }}>🎉</span>
+      <div className="max-w-[600px] w-full mx-auto my-8 sm:my-12 p-6 sm:p-8 text-center bg-cocoa-orchid rounded-lg border border-velvet-rose-mist/20">
+        <div className="w-[60px] h-[60px] rounded-full bg-royal-plum-veil flex items-center justify-center mx-auto mb-6">
+          <span className="text-2xl">🎉</span>
         </div>
 
-        <h1
-          style={{
-            color: "#f3e6ec",
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 700,
-            fontSize: "2rem",
-            margin: "0 0 1rem",
-          }}
-        >
+        <h1 className="text-ivory-blush font-montserrat font-bold text-3xl mb-4">
           Thank you for your order!
         </h1>
 
-        <p
-          style={{
-            color: "#cf9db8",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "1rem",
-            margin: "0 0 2rem",
-          }}
-        >
+        <p className="text-velvet-rose-mist font-poppins text-base mb-8">
           We've received your order and are processing it.
         </p>
 
-        <div
-          style={{
-            background: "rgba(85,56,88,0.15)",
-            borderRadius: "6px",
-            padding: "1.5rem",
-            marginBottom: "2rem",
-            textAlign: "left",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <span
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "0.85rem",
-              }}
-            >
+        <div className="bg-royal-plum-veil/15 rounded-md p-6 mb-8 text-left">
+          <div className="flex justify-between mb-2">
+            <span className="text-velvet-rose-mist font-inter text-sm">
               Order ID
             </span>
-            <span
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 600,
-              }}
-            >
+            <span className="text-ivory-blush font-inter font-semibold">
               #{order.orderId.substring(0, 8)}
             </span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <span
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "0.85rem",
-              }}
-            >
+          <div className="flex justify-between mb-2">
+            <span className="text-velvet-rose-mist font-inter text-sm">
               Payment Method
             </span>
-            <span
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 600,
-                textTransform: "capitalize",
-              }}
-            >
+            <span className="text-ivory-blush font-inter font-semibold capitalize">
               {order.paymentMethod === "cod" ? "Cash on Delivery" : "Razorpay"}
             </span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <span
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Inter, sans-serif",
-                fontSize: "0.85rem",
-              }}
-            >
+          <div className="flex justify-between mb-2">
+            <span className="text-velvet-rose-mist font-inter text-sm">
               Payment Status
             </span>
             <span
-              style={{
-                color: order.paymentStatus === "paid" ? "#a7f3d0" : "#fcd34d",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 600,
-                textTransform: "capitalize",
-              }}
+              className={`font-inter font-semibold capitalize ${
+                order.paymentStatus === "paid"
+                  ? "text-emerald-300"
+                  : "text-amber-300"
+              }`}
             >
               {order.paymentStatus}
             </span>
           </div>
-          <div
-            style={{
-              borderTop: "1px solid rgba(207,157,184,0.2)",
-              margin: "1rem 0",
-            }}
-          />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 700,
-              }}
-            >
+          <div className="border-t border-velvet-rose-mist/20 my-4" />
+          <div className="flex justify-between">
+            <span className="text-ivory-blush font-montserrat font-bold">
               Total Amount
             </span>
-            <span
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 700,
-              }}
-            >
+            <span className="text-ivory-blush font-montserrat font-bold">
               ₹{order.amount.toLocaleString("en-IN")}
             </span>
           </div>
@@ -246,35 +130,13 @@ const OrderSuccessPage = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center w-full">
           <Link
             to="/my-orders"
-            style={{
-              flex: 1,
-              background: "#413038",
-              color: "#f3e6ec",
-              border: "1px solid rgba(207,157,184,0.3)",
-              borderRadius: "4px",
-              padding: "12px",
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 600,
-              textDecoration: "none",
-              transition: "background 0.2s",
-            }}
+            className="flex-1 bg-cocoa-orchid text-ivory-blush border border-velvet-rose-mist/30 rounded p-3 font-montserrat font-semibold no-underline transition-colors hover:bg-cocoa-orchid/80"
           >
             View My Orders
           </Link>
           <Link
             to="/store"
-            style={{
-              flex: 1,
-              background: "#553858",
-              color: "#f3e6ec",
-              border: "none",
-              borderRadius: "4px",
-              padding: "12px",
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 600,
-              textDecoration: "none",
-              transition: "background 0.2s",
-            }}
+            className="flex-1 bg-royal-plum-veil text-ivory-blush border-none rounded p-3 font-montserrat font-semibold no-underline transition-colors hover:bg-royal-plum-veil/80"
           >
             Continue Shopping
           </Link>

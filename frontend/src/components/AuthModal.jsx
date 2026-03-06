@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { FiX, FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "sonner";
@@ -14,34 +15,21 @@ const PasswordInput = ({
 }) => {
   const [show, setShow] = useState(false);
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative">
       <input
-        className={className}
+        className={`${className} pr-10`}
         type={show ? "text" : "password"}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         required={required}
-        style={{ paddingRight: "2.5rem" }}
       />
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
         tabIndex={-1}
         aria-label={show ? "Hide password" : "Show password"}
-        style={{
-          position: "absolute",
-          right: "12px",
-          top: "50%",
-          transform: "translateY(-50%)",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          color: "#cf9db8",
-          display: "flex",
-          alignItems: "center",
-          padding: 0,
-        }}
+        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-velvet-rose-mist flex items-center p-0"
       >
         {show ? <FiEyeOff size={16} /> : <FiEye size={16} />}
       </button>
@@ -120,33 +108,6 @@ const AuthModal = ({ isOpen, onClose }) => {
   const inputCls =
     "w-full bg-cocoa-orchid border border-velvet-rose-mist text-ivory-blush placeholder:text-velvet-rose-mist/60 rounded-lg px-4 py-2.5 text-sm font-poppins outline-none focus:border-ivory-blush transition duration-200";
 
-  const spinnerStyle = {
-    width: "14px",
-    height: "14px",
-    border: "2px solid #cf9db8",
-    borderTopColor: "transparent",
-    borderRadius: "50%",
-    animation: "spin 0.7s linear infinite",
-    display: "inline-block",
-  };
-
-  const submitBtnStyle = (loading) => ({
-    background: loading ? "#413038" : "#553858",
-    color: "#f3e6ec",
-    border: "none",
-    borderRadius: "4px",
-    padding: "10px",
-    fontFamily: "Montserrat, sans-serif",
-    fontWeight: 600,
-    fontSize: "0.875rem",
-    cursor: loading ? "not-allowed" : "pointer",
-    transition: "background 0.2s",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "8px",
-  });
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -157,17 +118,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(46, 31, 36, 0.75)",
-              backdropFilter: "blur(4px)",
-              zIndex: 50,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "1rem",
-            }}
+            className="fixed inset-0 bg-midnight-truffle/75 backdrop-blur-xs z-50 flex items-center justify-center p-4"
           >
             <motion.div
               key="modal"
@@ -176,78 +127,33 @@ const AuthModal = ({ isOpen, onClose }) => {
               exit={{ opacity: 0, scale: 0.92, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "100%", maxWidth: "400px", zIndex: 51 }}
+              className="w-full max-w-[400px] z-51"
             >
-              <div
-                style={{
-                  background: "#2e1f24",
-                  border: "1px solid rgba(207,157,184,0.3)",
-                  borderRadius: "12px",
-                  padding: "2rem",
-                  boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-                }}
-              >
+              <div className="bg-midnight-truffle border border-velvet-rose-mist/30 rounded-xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                 {/* Header */}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "1.5rem",
-                  }}
-                >
-                  <h2
-                    style={{
-                      color: "#f3e6ec",
-                      fontFamily: "Montserrat, sans-serif",
-                      fontWeight: 700,
-                      fontSize: "1.25rem",
-                      margin: 0,
-                    }}
-                  >
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-ivory-blush font-montserrat font-bold text-xl m-0">
                     Juvelle
                   </h2>
                   <button
                     onClick={onClose}
-                    style={{
-                      color: "#cf9db8",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: "4px",
-                    }}
+                    className="text-velvet-rose-mist bg-transparent border-none cursor-pointer p-1 hover:text-ivory-blush transition-colors"
                   >
                     <FiX size={20} />
                   </button>
                 </div>
 
                 {/* Tabs */}
-                <div
-                  style={{
-                    display: "flex",
-                    background: "#413038",
-                    borderRadius: "8px",
-                    padding: "4px",
-                    marginBottom: "1.5rem",
-                  }}
-                >
+                <div className="flex bg-cocoa-orchid rounded-lg p-1 mb-6">
                   {["login", "register"].map((t) => (
                     <button
                       key={t}
                       onClick={() => setTab(t)}
-                      style={{
-                        flex: 1,
-                        padding: "8px",
-                        borderRadius: "6px",
-                        border: "none",
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "0.875rem",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        transition: "all 0.2s",
-                        background: tab === t ? "#553858" : "transparent",
-                        color: tab === t ? "#f3e6ec" : "#cf9db8",
-                      }}
+                      className={`flex-1 py-2 px-2 rounded-md border-none font-inter text-sm font-medium cursor-pointer transition-all duration-200 ${
+                        tab === t
+                          ? "bg-royal-plum-veil text-ivory-blush"
+                          : "bg-transparent text-velvet-rose-mist hover:text-ivory-blush"
+                      }`}
                     >
                       {t === "login" ? "Login" : "Register"}
                     </button>
@@ -256,14 +162,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
                 {/* Login Form */}
                 {tab === "login" && (
-                  <form
-                    onSubmit={handleLogin}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                    }}
-                  >
+                  <form onSubmit={handleLogin} className="flex flex-col gap-4">
                     <input
                       className={inputCls}
                       type="email"
@@ -289,11 +188,15 @@ const AuthModal = ({ isOpen, onClose }) => {
                     <button
                       type="submit"
                       disabled={loading}
-                      style={submitBtnStyle(loading)}
+                      className={`flex items-center justify-center gap-2 border-none rounded p-2.5 font-montserrat font-semibold text-[0.875rem] transition-colors duration-200 ${
+                        loading
+                          ? "bg-cocoa-orchid text-ivory-blush cursor-not-allowed"
+                          : "bg-cocoa-orchid text-ivory-blush cursor-pointer hover:bg-cocoa-orchid/90"
+                      }`}
                     >
                       {loading ? (
                         <>
-                          <span style={spinnerStyle} />
+                          <span className="w-3.5 h-3.5 border-2 border-velvet-rose-mist border-t-transparent rounded-full animate-spin inline-block" />
                           Signing in…
                         </>
                       ) : (
@@ -307,11 +210,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                 {tab === "register" && (
                   <form
                     onSubmit={handleRegister}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "1rem",
-                    }}
+                    className="flex flex-col gap-4"
                   >
                     <input
                       className={inputCls}
@@ -365,11 +264,15 @@ const AuthModal = ({ isOpen, onClose }) => {
                     <button
                       type="submit"
                       disabled={loading}
-                      style={submitBtnStyle(loading)}
+                      className={`flex items-center justify-center gap-2 border-none rounded p-2.5 font-montserrat font-semibold text-[0.875rem] transition-colors duration-200 ${
+                        loading
+                          ? "bg-cocoa-orchid text-ivory-blush cursor-not-allowed"
+                          : "bg-cocoa-orchid text-ivory-blush cursor-pointer hover:bg-cocoa-orchid/90"
+                      }`}
                     >
                       {loading ? (
                         <>
-                          <span style={spinnerStyle} />
+                          <span className="w-3.5 h-3.5 border-2 border-velvet-rose-mist border-t-transparent rounded-full animate-spin inline-block" />
                           Creating account…
                         </>
                       ) : (
@@ -381,8 +284,6 @@ const AuthModal = ({ isOpen, onClose }) => {
               </div>
             </motion.div>
           </motion.div>
-
-          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </>
       )}
     </AnimatePresence>

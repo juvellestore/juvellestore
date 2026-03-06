@@ -31,9 +31,9 @@ const MyOrdersPage = () => {
 
   if (authLoading || loading) {
     return (
-      <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+      <div className="bg-midnight-truffle min-h-screen">
         <Navbar />
-        <div style={{ textAlign: "center", padding: "4rem", color: "#f3e6ec" }}>
+        <div className="text-center p-16 text-ivory-blush">
           Loading orders...
         </div>
       </div>
@@ -41,188 +41,74 @@ const MyOrdersPage = () => {
   }
 
   return (
-    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+    <div className="bg-midnight-truffle min-h-screen">
       <Navbar />
-      <div
-        style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem 1.5rem" }}
-      >
-        <h1
-          style={{
-            color: "#f3e6ec",
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 700,
-            fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
-            margin: "0 0 2rem",
-          }}
-        >
+      <div className="max-w-[800px] mx-auto py-8 px-6">
+        <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.5rem,4vw,2.5rem)] mb-8">
           My Orders
         </h1>
 
         {orders.length === 0 ? (
-          <div
-            style={{
-              background: "#413038",
-              borderRadius: "8px",
-              padding: "2rem",
-              textAlign: "center",
-              border: "1px solid rgba(207,157,184,0.2)",
-            }}
-          >
-            <p
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Poppins, sans-serif",
-                fontSize: "1rem",
-              }}
-            >
+          <div className="bg-cocoa-orchid rounded-lg p-8 text-center border border-velvet-rose-mist/20">
+            <p className="text-velvet-rose-mist font-poppins text-base">
               You haven't placed any orders yet.
             </p>
             <button
               onClick={() => navigate("/store")}
-              style={{
-                background: "#553858",
-                color: "#f3e6ec",
-                border: "none",
-                borderRadius: "4px",
-                padding: "10px 24px",
-                marginTop: "1rem",
-                fontFamily: "Montserrat, sans-serif",
-                cursor: "pointer",
-              }}
+              className="mt-4 bg-royal-plum-veil text-ivory-blush border-none rounded px-6 py-2.5 font-montserrat cursor-pointer hover:bg-royal-plum-veil/80 transition-colors"
             >
               Start Shopping
             </button>
           </div>
         ) : (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
-          >
+          <div className="flex flex-col gap-6">
             {orders.map((order) => (
               <div
                 key={order._id}
-                style={{
-                  background: "#413038",
-                  borderRadius: "8px",
-                  padding: "1.5rem",
-                  border: "1px solid rgba(207,157,184,0.2)",
-                }}
+                className="bg-cocoa-orchid rounded-lg p-6 border border-velvet-rose-mist/20"
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: "1rem",
-                    flexWrap: "wrap",
-                    gap: "1rem",
-                  }}
-                >
+                <div className="flex justify-between items-start mb-4 flex-wrap gap-4">
                   <div>
-                    <h3
-                      style={{
-                        color: "#f3e6ec",
-                        fontFamily: "Montserrat, sans-serif",
-                        margin: "0 0 0.5rem",
-                        fontSize: "1.1rem",
-                      }}
-                    >
+                    <h3 className="text-ivory-blush font-montserrat m-0 mb-2 text-lg">
                       Order #{order.orderId.split("-")[0].toUpperCase()}
                     </h3>
-                    <p
-                      style={{
-                        color: "#cf9db8",
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: "0.85rem",
-                        margin: 0,
-                      }}
-                    >
+                    <p className="text-velvet-rose-mist font-inter text-[0.85rem] m-0">
                       {new Date(order.orderDate).toLocaleDateString()}
                     </p>
                   </div>
-                  <div style={{ textAlign: "right" }}>
-                    <p
-                      style={{
-                        color: "#f3e6ec",
-                        fontFamily: "Montserrat, sans-serif",
-                        fontWeight: 700,
-                        fontSize: "1.2rem",
-                        margin: "0 0 0.5rem",
-                      }}
-                    >
+                  <div className="text-right">
+                    <p className="text-ivory-blush font-montserrat font-bold text-xl m-0 mb-2">
                       ₹{order.amount.toLocaleString("en-IN")}
                     </p>
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <div className="flex gap-2 justify-end">
                       <span
-                        style={{
-                          background: "rgba(207,157,184,0.1)",
-                          color:
-                            order.paymentStatus === "paid"
-                              ? "#a7f3d0"
-                              : "#fcd34d",
-                          padding: "4px 8px",
-                          borderRadius: "4px",
-                          fontSize: "0.75rem",
-                          fontFamily: "Inter, sans-serif",
-                          textTransform: "capitalize",
-                          border: "1px solid rgba(207,157,184,0.2)",
-                        }}
+                        className={`bg-velvet-rose-mist/10 px-2 py-1 rounded text-xs font-inter capitalize border border-velvet-rose-mist/20 ${
+                          order.paymentStatus === "paid"
+                            ? "text-emerald-300"
+                            : "text-amber-300"
+                        }`}
                       >
                         {order.paymentMethod === "razorpay"
                           ? "Razorpay"
                           : "COD"}{" "}
                         - {order.paymentStatus}
                       </span>
-                      <span
-                        style={{
-                          background: "rgba(207,157,184,0.1)",
-                          color: "#cf9db8",
-                          padding: "4px 8px",
-                          borderRadius: "4px",
-                          fontSize: "0.75rem",
-                          fontFamily: "Inter, sans-serif",
-                          textTransform: "capitalize",
-                          border: "1px solid rgba(207,157,184,0.2)",
-                        }}
-                      >
+                      <span className="bg-velvet-rose-mist/10 text-velvet-rose-mist px-2 py-1 rounded text-xs font-inter capitalize border border-velvet-rose-mist/20">
                         {order.orderStatus}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div
-                  style={{
-                    borderTop: "1px solid rgba(207,157,184,0.1)",
-                    paddingTop: "1rem",
-                  }}
-                >
-                  <p
-                    style={{
-                      color: "#f3e6ec",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.9rem",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
+                <div className="border-t border-velvet-rose-mist/10 pt-4">
+                  <p className="text-ivory-blush font-inter text-sm mb-2">
                     Items
                   </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "0.5rem",
-                    }}
-                  >
+                  <div className="flex flex-col gap-2">
                     {order.items.map((item, idx) => (
                       <div
                         key={idx}
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          color: "#cf9db8",
-                          fontFamily: "Poppins, sans-serif",
-                          fontSize: "0.85rem",
-                        }}
+                        className="flex justify-between text-velvet-rose-mist font-poppins text-[0.85rem]"
                       >
                         <span>
                           {item.quantity} x {item.productName} (Size:{" "}

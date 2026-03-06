@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+﻿import React, { useRef, useEffect, useState, useCallback } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -31,7 +32,7 @@ function drawFrame(canvas, image) {
   const ih = image.naturalHeight;
   if (!iw || !ih) return;
 
-  // Best-quality interpolation — critical for 1280�-720 source images
+  // Best-quality interpolation — critical for 1280�-720 source images
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 

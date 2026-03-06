@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import { FiTrash2, FiShoppingBag, FiArrowLeft } from "react-icons/fi";
 import { toast } from "sonner";
 import Navbar from "../components/Navbar.jsx";
@@ -37,39 +38,20 @@ const CartPage = () => {
   };
 
   return (
-    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+    <div className="bg-midnight-truffle min-h-screen">
       <Navbar />
       <div className="max-w-[900px] mx-auto px-4 py-8 sm:px-6 w-full">
         <Link
           to="/store"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            color: "#cf9db8",
-            fontFamily: "Inter, sans-serif",
-            fontSize: "0.85rem",
-            textDecoration: "none",
-            marginBottom: "1.5rem",
-          }}
+          className="inline-flex items-center gap-1.5 text-velvet-rose-mist font-inter text-[0.85rem] no-underline mb-6 hover:text-velvet-rose-mist/80 transition-colors"
         >
           <FiArrowLeft size={16} /> Continue Shopping
         </Link>
 
-        <h1
-          style={{
-            color: "#f3e6ec",
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 700,
-            fontSize: "clamp(1.4rem, 4vw, 2rem)",
-            margin: "0 0 1.5rem",
-          }}
-        >
+        <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.4rem,4vw,2rem)] m-0 mb-6">
           Your Cart{" "}
           {cartCount > 0 && (
-            <span
-              style={{ color: "#cf9db8", fontSize: "1rem", fontWeight: 400 }}
-            >
+            <span className="text-velvet-rose-mist text-base font-normal">
               ({cartCount} item{cartCount !== 1 ? "s" : ""})
             </span>
           )}
@@ -79,34 +61,18 @@ const CartPage = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            style={{ textAlign: "center", padding: "4rem 0" }}
+            className="text-center py-16"
           >
             <FiShoppingBag
               size={56}
-              style={{ color: "#553858", marginBottom: "1rem" }}
+              className="text-royal-plum-veil mx-auto mb-4"
             />
-            <p
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Poppins, sans-serif",
-                fontSize: "1rem",
-                marginBottom: "1.5rem",
-              }}
-            >
+            <p className="text-velvet-rose-mist font-poppins text-base mb-6">
               Your cart is empty.
             </p>
             <Link
               to="/store"
-              style={{
-                background: "#553858",
-                color: "#f3e6ec",
-                padding: "10px 24px",
-                borderRadius: "2px",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 600,
-                textDecoration: "none",
-                fontSize: "0.875rem",
-              }}
+              className="bg-royal-plum-veil text-ivory-blush px-6 py-2.5 rounded-sm font-montserrat font-semibold no-underline text-sm hover:bg-royal-plum-veil/90 transition-colors"
             >
               Browse Collection
             </Link>
@@ -126,121 +92,44 @@ const CartPage = () => {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -12 }}
-                    className="flex flex-row gap-3 sm:gap-4 items-center w-full"
-                    style={{
-                      background: "#413038",
-                      borderRadius: "8px",
-                      padding: "1rem",
-                      border: "1px solid rgba(207,157,184,0.15)",
-                    }}
+                    className="flex flex-row gap-3 sm:gap-4 items-center w-full bg-cocoa-orchid rounded-lg p-4 border border-velvet-rose-mist/15"
                   >
                     {/* Image */}
-                    <div
-                      style={{
-                        width: "72px",
-                        height: "96px",
-                        background: "#2e1f24",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                        flexShrink: 0,
-                      }}
-                    >
+                    <div className="w-[72px] h-[96px] bg-midnight-truffle rounded overflow-hidden shrink-0">
                       {imgSrc ? (
                         <img
                           src={imgSrc}
                           alt={product?.productName}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
+                          className="w-full h-full object-cover"
                         />
                       ) : null}
                     </div>
 
                     {/* Info */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p
-                        style={{
-                          color: "#f3e6ec",
-                          fontFamily: "Montserrat, sans-serif",
-                          fontWeight: 600,
-                          fontSize: "0.9rem",
-                          margin: "0 0 4px",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-ivory-blush font-montserrat font-semibold text-[0.9rem] m-0 mb-1 overflow-hidden text-ellipsis whitespace-nowrap">
                         {product?.productName || "Product"}
                       </p>
-                      <p
-                        style={{
-                          color: "#cf9db8",
-                          fontFamily: "Inter, sans-serif",
-                          fontSize: "0.8rem",
-                          margin: "0 0 8px",
-                        }}
-                      >
+                      <p className="text-velvet-rose-mist font-inter text-sm m-0 mb-2">
                         Size: {item.size}
                       </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0",
-                        }}
-                      >
+                      <div className="flex items-center gap-0">
                         <button
                           onClick={() =>
                             handleUpdateQty(item.cartItemId, item.quantity - 1)
                           }
-                          style={{
-                            width: "28px",
-                            height: "28px",
-                            background: "#2e1f24",
-                            color: "#f3e6ec",
-                            border: "1px solid rgba(207,157,184,0.3)",
-                            borderRadius: "4px 0 0 4px",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                          }}
+                          className="w-7 h-7 bg-midnight-truffle text-ivory-blush border border-velvet-rose-mist/30 rounded-l cursor-pointer text-base flex items-center justify-center hover:bg-midnight-truffle/80 transition-colors"
                         >
                           −
                         </button>
-                        <span
-                          style={{
-                            minWidth: "36px",
-                            height: "28px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            background: "#2e1f24",
-                            color: "#f3e6ec",
-                            border: "1px solid rgba(207,157,184,0.3)",
-                            borderLeft: "none",
-                            borderRight: "none",
-                            fontFamily: "Montserrat, sans-serif",
-                            fontSize: "0.85rem",
-                            fontWeight: 600,
-                          }}
-                        >
+                        <span className="min-w-[36px] h-7 flex items-center justify-center bg-midnight-truffle text-ivory-blush border-y border-velvet-rose-mist/30 font-montserrat text-[0.85rem] font-semibold">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() =>
                             handleUpdateQty(item.cartItemId, item.quantity + 1)
                           }
-                          style={{
-                            width: "28px",
-                            height: "28px",
-                            background: "#2e1f24",
-                            color: "#f3e6ec",
-                            border: "1px solid rgba(207,157,184,0.3)",
-                            borderRadius: "0 4px 4px 0",
-                            fontSize: "1rem",
-                            cursor: "pointer",
-                          }}
+                          className="w-7 h-7 bg-midnight-truffle text-ivory-blush border border-velvet-rose-mist/30 rounded-r cursor-pointer text-base flex items-center justify-center hover:bg-midnight-truffle/80 transition-colors"
                         >
                           +
                         </button>
@@ -248,16 +137,8 @@ const CartPage = () => {
                     </div>
 
                     {/* Price + remove */}
-                    <div style={{ textAlign: "right", flexShrink: 0 }}>
-                      <p
-                        style={{
-                          color: "#f3e6ec",
-                          fontFamily: "Montserrat, sans-serif",
-                          fontWeight: 700,
-                          fontSize: "0.95rem",
-                          margin: "0 0 8px",
-                        }}
-                      >
+                    <div className="text-right shrink-0">
+                      <p className="text-ivory-blush font-montserrat font-bold text-[0.95rem] m-0 mb-2">
                         ₹
                         {((product?.price || 0) * item.quantity).toLocaleString(
                           "en-IN",
@@ -265,13 +146,7 @@ const CartPage = () => {
                       </p>
                       <button
                         onClick={() => handleRemove(item.cartItemId)}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          color: "#cf9db8",
-                          cursor: "pointer",
-                          padding: "4px",
-                        }}
+                        className="bg-transparent border-none text-velvet-rose-mist cursor-pointer p-1 hover:text-red-400 transition-colors"
                         title="Remove"
                       >
                         <FiTrash2 size={16} />
@@ -283,101 +158,30 @@ const CartPage = () => {
             </div>
 
             {/* Summary */}
-            <div
-              className="w-full md:min-w-[220px] lg:min-w-[280px] md:sticky top-[80px]"
-              style={{
-                background: "#413038",
-                borderRadius: "8px",
-                padding: "1.5rem",
-                border: "1px solid rgba(207,157,184,0.2)",
-              }}
-            >
-              <h2
-                style={{
-                  color: "#f3e6ec",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  margin: "0 0 1rem",
-                }}
-              >
+            <div className="w-full md:min-w-[220px] lg:min-w-[280px] md:sticky top-[80px] bg-cocoa-orchid rounded-lg p-6 border border-velvet-rose-mist/20">
+              <h2 className="text-ivory-blush font-montserrat font-semibold text-base m-0 mb-4">
                 Order Summary
               </h2>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "8px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#cf9db8",
-                    fontFamily: "Poppins, sans-serif",
-                    fontSize: "0.875rem",
-                  }}
-                >
+              <div className="flex justify-between mb-2">
+                <span className="text-velvet-rose-mist font-poppins text-[0.875rem]">
                   Subtotal
                 </span>
-                <span
-                  style={{
-                    color: "#f3e6ec",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                  }}
-                >
+                <span className="text-ivory-blush font-montserrat font-semibold text-[0.875rem]">
                   ₹{subtotal.toLocaleString("en-IN")}
                 </span>
               </div>
-              <div
-                style={{
-                  borderTop: "1px solid rgba(207,157,184,0.2)",
-                  margin: "12px 0",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "16px",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#f3e6ec",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontWeight: 700,
-                    fontSize: "0.95rem",
-                  }}
-                >
+              <div className="border-t border-velvet-rose-mist/20 my-3" />
+              <div className="flex justify-between mb-4">
+                <span className="text-ivory-blush font-montserrat font-bold text-[0.95rem]">
                   Total
                 </span>
-                <span
-                  style={{
-                    color: "#f3e6ec",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontWeight: 700,
-                    fontSize: "0.95rem",
-                  }}
-                >
+                <span className="text-ivory-blush font-montserrat font-bold text-[0.95rem]">
                   ₹{subtotal.toLocaleString("en-IN")}
                 </span>
               </div>
               <button
                 onClick={() => navigate("/checkout")}
-                style={{
-                  width: "100%",
-                  background: "#553858",
-                  color: "#f3e6ec",
-                  border: "none",
-                  borderRadius: "2px",
-                  padding: "10px",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                }}
+                className="w-full bg-royal-plum-veil text-ivory-blush border-none rounded-sm p-2.5 font-montserrat font-semibold text-[0.875rem] cursor-pointer hover:bg-royal-plum-veil/90 transition-colors"
               >
                 Proceed to Checkout
               </button>

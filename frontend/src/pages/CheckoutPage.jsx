@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "../components/Navbar.jsx";
@@ -6,18 +6,9 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import api from "../api/axios.js";
 
-const inputCls = {
-  width: "100%",
-  background: "#413038",
-  border: "1px solid rgba(207,157,184,0.3)",
-  color: "#f3e6ec",
-  borderRadius: "6px",
-  padding: "10px 14px",
-  fontFamily: "Poppins, sans-serif",
-  fontSize: "0.875rem",
-  outline: "none",
-  boxSizing: "border-box",
-};
+// Tailwind classes for input fields
+const inputCls =
+  "w-full bg-cocoa-orchid border border-velvet-rose-mist/30 text-ivory-blush rounded-md px-3.5 py-2.5 font-poppins text-[0.875rem] outline-none focus:border-velvet-rose-mist/60 transition-colors box-border";
 
 // Simple load script function for Razorpay
 const loadScript = (src) => {
@@ -190,67 +181,27 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+    <div className="bg-midnight-truffle min-h-screen">
       <Navbar />
       <div className="max-w-[900px] mx-auto px-4 py-8 sm:px-6 w-full">
-        <h1
-          style={{
-            color: "#f3e6ec",
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 700,
-            fontSize: "clamp(1.4rem, 4vw, 2rem)",
-            margin: "0 0 2rem",
-          }}
-        >
+        <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.4rem,4vw,2rem)] m-0 mb-8">
           Checkout
         </h1>
 
         <div className="flex flex-col md:grid md:grid-cols-[1fr_340px] gap-8 items-start w-full">
           {/* Main Content Area */}
           <form onSubmit={handleSubmit}>
-            <div
-              style={{
-                background: "#413038",
-                borderRadius: "8px",
-                padding: "1.5rem",
-                border: "1px solid rgba(207,157,184,0.2)",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <h2
-                style={{
-                  color: "#f3e6ec",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  margin: "0 0 1.25rem",
-                }}
-              >
+            <div className="bg-cocoa-orchid rounded-lg p-6 border border-velvet-rose-mist/20 mb-6">
+              <h2 className="text-ivory-blush font-montserrat font-semibold text-base m-0 mb-5">
                 Shipping Details
               </h2>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                }}
-              >
+              <div className="flex flex-col gap-4">
                 <div>
-                  <label
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
+                  <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                     Full Name *
                   </label>
                   <input
-                    style={inputCls}
+                    className={inputCls}
                     value={form.fullName}
                     onChange={(e) =>
                       setForm((p) => ({ ...p, fullName: e.target.value }))
@@ -259,41 +210,21 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div>
-                  <label
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
+                  <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                     Email
                   </label>
                   <input
-                    style={{ ...inputCls, opacity: 0.6 }}
+                    className={`${inputCls} opacity-60 cursor-not-allowed`}
                     value={form.email}
                     readOnly
                   />
                 </div>
                 <div>
-                  <label
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
+                  <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                     Phone Number *
                   </label>
                   <input
-                    style={inputCls}
+                    className={inputCls}
                     value={form.phoneNumber}
                     onChange={(e) =>
                       setForm((p) => ({ ...p, phoneNumber: e.target.value }))
@@ -302,25 +233,11 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div>
-                  <label
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
+                  <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                     Delivery Address *
                   </label>
                   <textarea
-                    style={{
-                      ...inputCls,
-                      minHeight: "80px",
-                      resize: "vertical",
-                    }}
+                    className={`${inputCls} min-h-[80px] resize-y`}
                     value={form.address}
                     onChange={(e) =>
                       setForm((p) => ({ ...p, address: e.target.value }))
@@ -331,51 +248,17 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <div
-              style={{
-                background: "#413038",
-                borderRadius: "8px",
-                padding: "1.5rem",
-                border: "1px solid rgba(207,157,184,0.2)",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <h2
-                style={{
-                  color: "#f3e6ec",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  margin: "0 0 1.25rem",
-                }}
-              >
+            <div className="bg-cocoa-orchid rounded-lg p-6 border border-velvet-rose-mist/20 mb-6">
+              <h2 className="text-ivory-blush font-montserrat font-semibold text-base m-0 mb-5">
                 Payment Method
               </h2>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                }}
-              >
+              <div className="flex flex-col gap-4">
                 <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    padding: "16px",
-                    border:
-                      paymentMethod === "razorpay"
-                        ? "2px solid #cf9db8"
-                        : "2px solid rgba(207,157,184,0.2)",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    background:
-                      paymentMethod === "razorpay"
-                        ? "rgba(207,157,184,0.05)"
-                        : "transparent",
-                    transition: "all 0.2s ease",
-                  }}
+                  className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+                    paymentMethod === "razorpay"
+                      ? "border-velvet-rose-mist bg-velvet-rose-mist/5"
+                      : "border-velvet-rose-mist/20 bg-transparent hover:border-velvet-rose-mist/40"
+                  }`}
                 >
                   <input
                     type="radio"
@@ -383,54 +266,24 @@ const CheckoutPage = () => {
                     value="razorpay"
                     checked={paymentMethod === "razorpay"}
                     onChange={() => setPaymentMethod("razorpay")}
-                    style={{
-                      accentColor: "#cf9db8",
-                      width: "18px",
-                      height: "18px",
-                      cursor: "pointer",
-                    }}
+                    className="accent-velvet-rose-mist w-4.5 h-4.5 cursor-pointer"
                   />
                   <div>
-                    <span
-                      style={{
-                        color: "#f3e6ec",
-                        fontFamily: "Montserrat, sans-serif",
-                        fontWeight: 600,
-                        display: "block",
-                      }}
-                    >
+                    <span className="text-ivory-blush font-montserrat font-semibold block">
                       Pay Online (Razorpay)
                     </span>
-                    <span
-                      style={{
-                        color: "#cf9db8",
-                        fontFamily: "Poppins, sans-serif",
-                        fontSize: "0.8rem",
-                      }}
-                    >
+                    <span className="text-velvet-rose-mist font-poppins text-xs">
                       Cards, UPI, NetBanking, Wallets
                     </span>
                   </div>
                 </label>
 
                 <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    padding: "16px",
-                    border:
-                      paymentMethod === "cod"
-                        ? "2px solid #cf9db8"
-                        : "2px solid rgba(207,157,184,0.2)",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    background:
-                      paymentMethod === "cod"
-                        ? "rgba(207,157,184,0.05)"
-                        : "transparent",
-                    transition: "all 0.2s ease",
-                  }}
+                  className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ease-in-out ${
+                    paymentMethod === "cod"
+                      ? "border-velvet-rose-mist bg-velvet-rose-mist/5"
+                      : "border-velvet-rose-mist/20 bg-transparent hover:border-velvet-rose-mist/40"
+                  }`}
                 >
                   <input
                     type="radio"
@@ -438,31 +291,13 @@ const CheckoutPage = () => {
                     value="cod"
                     checked={paymentMethod === "cod"}
                     onChange={() => setPaymentMethod("cod")}
-                    style={{
-                      accentColor: "#cf9db8",
-                      width: "18px",
-                      height: "18px",
-                      cursor: "pointer",
-                    }}
+                    className="accent-velvet-rose-mist w-4.5 h-4.5 cursor-pointer"
                   />
                   <div>
-                    <span
-                      style={{
-                        color: "#f3e6ec",
-                        fontFamily: "Montserrat, sans-serif",
-                        fontWeight: 600,
-                        display: "block",
-                      }}
-                    >
+                    <span className="text-ivory-blush font-montserrat font-semibold block">
                       Cash on Delivery
                     </span>
-                    <span
-                      style={{
-                        color: "#cf9db8",
-                        fontFamily: "Poppins, sans-serif",
-                        fontSize: "0.8rem",
-                      }}
-                    >
+                    <span className="text-velvet-rose-mist font-poppins text-xs">
                       Pay when you receive the order
                     </span>
                   </div>
@@ -473,19 +308,11 @@ const CheckoutPage = () => {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: "100%",
-                background: loading ? "#413038" : "#553858",
-                color: "#f3e6ec",
-                border: "none",
-                borderRadius: "2px",
-                padding: "16px",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 700,
-                fontSize: "1.05rem",
-                cursor: loading ? "not-allowed" : "pointer",
-                transition: "background 0.2s",
-              }}
+              className={`w-full rounded-sm p-4 font-montserrat font-bold text-base transition-colors duration-200 border-none outline-none ${
+                loading
+                  ? "bg-cocoa-orchid text-velvet-rose-mist cursor-not-allowed"
+                  : "bg-royal-plum-veil text-ivory-blush hover:bg-royal-plum-veil/80 cursor-pointer"
+              }`}
             >
               {loading
                 ? "Processing…"
@@ -496,71 +323,24 @@ const CheckoutPage = () => {
           </form>
 
           {/* Order summary */}
-          <div
-            className="w-full md:sticky top-[80px]"
-            style={{
-              background: "#413038",
-              borderRadius: "8px",
-              padding: "1.5rem",
-              border: "1px solid rgba(207,157,184,0.2)",
-            }}
-          >
-            <h2
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 600,
-                fontSize: "1rem",
-                margin: "0 0 1rem",
-              }}
-            >
+          <div className="w-full md:sticky top-[80px] bg-cocoa-orchid rounded-lg p-6 border border-velvet-rose-mist/20">
+            <h2 className="text-ivory-blush font-montserrat font-semibold text-base m-0 mb-4">
               Order Summary
             </h2>
             {cartItems.map((item) => (
               <div
                 key={item.cartItemId}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "8px",
-                  alignItems: "center",
-                }}
+                className="flex justify-between items-center mb-2"
               >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p
-                    style={{
-                      color: "#f3e6ec",
-                      fontFamily: "Poppins, sans-serif",
-                      fontSize: "0.8rem",
-                      margin: 0,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {item.productId?.productName} �- {item.quantity}
+                <div className="flex-1 min-w-0">
+                  <p className="text-ivory-blush font-poppins text-xs m-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                    {item.productId?.productName} × {item.quantity}
                   </p>
-                  <p
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Inter, sans-serif",
-                      fontSize: "0.7rem",
-                      margin: 0,
-                    }}
-                  >
+                  <p className="text-velvet-rose-mist font-inter text-[0.7rem] m-0">
                     Size: {item.size}
                   </p>
                 </div>
-                <span
-                  style={{
-                    color: "#f3e6ec",
-                    fontFamily: "Montserrat, sans-serif",
-                    fontWeight: 600,
-                    fontSize: "0.85rem",
-                    flexShrink: 0,
-                    marginLeft: "12px",
-                  }}
-                >
+                <span className="text-ivory-blush font-montserrat font-semibold text-sm shrink-0 ml-3">
                   ₹
                   {(
                     (item.productId?.price || 0) * item.quantity
@@ -568,29 +348,12 @@ const CheckoutPage = () => {
                 </span>
               </div>
             ))}
-            <div
-              style={{
-                borderTop: "1px solid rgba(207,157,184,0.2)",
-                margin: "12px 0",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  color: "#f3e6ec",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 700,
-                }}
-              >
+            <div className="border-t border-velvet-rose-mist/20 my-3" />
+            <div className="flex justify-between">
+              <span className="text-ivory-blush font-montserrat font-bold">
                 Total
               </span>
-              <span
-                style={{
-                  color: "#f3e6ec",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 700,
-                }}
-              >
+              <span className="text-ivory-blush font-montserrat font-bold">
                 ₹{subtotal.toLocaleString("en-IN")}
               </span>
             </div>

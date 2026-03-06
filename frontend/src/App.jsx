@@ -31,7 +31,7 @@ const AdminRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <div style={{ margin: 0, padding: 0 }}>
+    <div className="m-0 p-0">
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/store" element={<StorePage />} />

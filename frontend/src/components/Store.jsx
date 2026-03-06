@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FiPackage } from "react-icons/fi";
 import { toast } from "sonner";
@@ -7,51 +8,19 @@ import ProductCard from "./ProductCard.jsx";
 
 // Skeleton card
 const SkeletonCard = () => (
-  <div
-    style={{
-      background: "#413038",
-      borderRadius: "8px",
-      overflow: "hidden",
-      border: "1px solid rgba(207,157,184,0.1)",
-    }}
-  >
+  <div className="bg-cocoa-orchid rounded-lg overflow-hidden border border-velvet-rose-mist/10">
     <div
+      className="aspect-3/4 animate-[shimmer_1.4s_infinite]"
       style={{
-        aspectRatio: "3/4",
         background:
           "linear-gradient(90deg, #413038 25%, #553858 50%, #413038 75%)",
         backgroundSize: "200% 100%",
-        animation: "shimmer 1.4s infinite",
       }}
     />
-    <div style={{ padding: "0.875rem" }}>
-      <div
-        style={{
-          height: "14px",
-          background: "#553858",
-          borderRadius: "4px",
-          marginBottom: "8px",
-          opacity: 0.5,
-        }}
-      />
-      <div
-        style={{
-          height: "14px",
-          background: "#553858",
-          borderRadius: "4px",
-          width: "60%",
-          marginBottom: "12px",
-          opacity: 0.5,
-        }}
-      />
-      <div
-        style={{
-          height: "36px",
-          background: "#553858",
-          borderRadius: "2px",
-          opacity: 0.4,
-        }}
-      />
+    <div className="p-3.5">
+      <div className="h-3.5 bg-royal-plum-veil rounded mb-2 opacity-50" />
+      <div className="h-3.5 bg-royal-plum-veil rounded w-3/5 mb-3 opacity-50" />
+      <div className="h-9 bg-royal-plum-veil rounded-sm opacity-40" />
     </div>
     <style>{`@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }`}</style>
   </div>
@@ -85,43 +54,15 @@ const Store = ({ onOpenAuth }) => {
   }, [sort]);
 
   return (
-    <div
-      className="min-h-[calc(100vh-53px)] px-4 py-8 sm:px-6 w-full"
-      style={{ background: "#2e1f24" }}
-    >
+    <div className="min-h-[calc(100vh-53px)] px-4 py-8 sm:px-6 w-full bg-midnight-truffle">
       <div className="max-w-[1200px] mx-auto w-full">
         {/* Header + Sort */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "1rem",
-            marginBottom: "2rem",
-          }}
-        >
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
-            <h1
-              style={{
-                color: "#f3e6ec",
-                fontFamily: "Montserrat, sans-serif",
-                fontWeight: 700,
-                fontSize: "clamp(1.5rem, 4vw, 2rem)",
-                margin: 0,
-                letterSpacing: "-0.02em",
-              }}
-            >
+            <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.5rem,4vw,2rem)] m-0 tracking-[-0.02em]">
               Our Collection
             </h1>
-            <p
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Poppins, sans-serif",
-                fontSize: "0.875rem",
-                margin: "4px 0 0",
-              }}
-            >
+            <p className="text-velvet-rose-mist font-poppins text-sm m-0 mt-1">
               {loading
                 ? "Loading…"
                 : `${products.length} piece${products.length !== 1 ? "s" : ""}`}
@@ -129,24 +70,16 @@ const Store = ({ onOpenAuth }) => {
           </div>
 
           {/* Sort buttons */}
-          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+          <div className="flex gap-1.5 flex-wrap">
             {SORT_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setSort(opt.value)}
-                style={{
-                  padding: "6px 14px",
-                  borderRadius: "2px",
-                  border: "1px solid",
-                  borderColor:
-                    sort === opt.value ? "#553858" : "rgba(207,157,184,0.3)",
-                  background: sort === opt.value ? "#553858" : "transparent",
-                  color: sort === opt.value ? "#f3e6ec" : "#cf9db8",
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "0.75rem",
-                  cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
+                className={`px-3.5 py-1.5 rounded-sm border font-inter text-xs cursor-pointer transition-all duration-200 ${
+                  sort === opt.value
+                    ? "border-royal-plum-veil bg-royal-plum-veil text-ivory-blush"
+                    : "border-velvet-rose-mist/30 bg-transparent text-velvet-rose-mist"
+                }`}
               >
                 {opt.label}
               </button>
@@ -165,24 +98,10 @@ const Store = ({ onOpenAuth }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "40vh",
-              gap: "1rem",
-            }}
+            className="flex flex-col items-center justify-center min-h-[40vh] gap-4"
           >
-            <FiPackage size={48} style={{ color: "#553858" }} />
-            <p
-              style={{
-                color: "#cf9db8",
-                fontFamily: "Poppins, sans-serif",
-                fontSize: "1rem",
-                margin: 0,
-              }}
-            >
+            <FiPackage size={48} className="text-royal-plum-veil" />
+            <p className="text-velvet-rose-mist font-poppins text-base m-0">
               No products yet. Check back soon!
             </p>
           </motion.div>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+﻿import React, { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FiUser,
   FiPackage,
@@ -21,18 +22,8 @@ const STATUS_COLORS = {
   cancelled: "#7c4a4a",
 };
 
-const inputCls = {
-  width: "100%",
-  background: "#2e1f24",
-  border: "1px solid rgba(207,157,184,0.3)",
-  color: "#f3e6ec",
-  borderRadius: "6px",
-  padding: "10px 14px",
-  fontFamily: "Poppins, sans-serif",
-  fontSize: "0.875rem",
-  outline: "none",
-  boxSizing: "border-box",
-};
+const inputCls =
+  "w-full bg-midnight-truffle border border-velvet-rose-mist/30 text-ivory-blush rounded-md px-3.5 py-2.5 font-poppins text-sm outline-none box-border";
 
 const ProfilePage = () => {
   const { user, updateUser, loading: authLoading } = useAuth();
@@ -85,94 +76,53 @@ const ProfilePage = () => {
     }
   };
 
-  const tabStyle = (active) => ({
-    padding: "8px 20px",
-    borderRadius: "6px 6px 0 0",
-    border: "none",
-    background: active ? "#413038" : "transparent",
-    color: active ? "#f3e6ec" : "#cf9db8",
-    fontFamily: "Inter, sans-serif",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    cursor: "pointer",
-    transition: "all 0.2s",
-  });
+  const getTabClass = (active) => {
+    return `px-5 py-2 rounded-t-md border-none font-inter text-sm font-medium cursor-pointer transition-all duration-200 ${
+      active
+        ? "bg-cocoa-orchid text-ivory-blush"
+        : "bg-transparent text-velvet-rose-mist"
+    }`;
+  };
 
   return (
-    <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
+    <div className="bg-midnight-truffle min-h-screen">
       <Navbar />
       <div className="max-w-[860px] mx-auto px-4 py-8 sm:px-6 w-full">
-        <h1
-          style={{
-            color: "#f3e6ec",
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: 700,
-            fontSize: "clamp(1.4rem, 4vw, 2rem)",
-            margin: "0 0 1.5rem",
-          }}
-        >
+        <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.4rem,4vw,2rem)] m-0 mb-6">
           My Account
         </h1>
 
         {/* Tabs */}
-        <div
-          style={{
-            display: "flex",
-            borderBottom: "1px solid rgba(207,157,184,0.2)",
-            marginBottom: "0",
-          }}
-        >
+        <div className="flex border-b border-velvet-rose-mist/20 mb-0">
           <button
-            style={tabStyle(tab === "profile")}
+            className={getTabClass(tab === "profile")}
             onClick={() => setTab("profile")}
           >
-            <FiUser style={{ marginRight: "6px" }} />
+            <FiUser className="inline-block mr-1.5" />
             Profile
           </button>
           <button
-            style={tabStyle(tab === "orders")}
+            className={getTabClass(tab === "orders")}
             onClick={() => setTab("orders")}
           >
-            <FiPackage style={{ marginRight: "6px" }} />
+            <FiPackage className="inline-block mr-1.5" />
             My Orders
           </button>
         </div>
 
-        <div
-          style={{
-            background: "#413038",
-            borderRadius: "0 8px 8px 8px",
-            padding: "1.5rem",
-            border: "1px solid rgba(207,157,184,0.2)",
-          }}
-        >
+        <div className="bg-cocoa-orchid rounded-tl-none rounded-tr-md rounded-b-md p-6 border border-velvet-rose-mist/20">
           {/* Profile tab */}
           {tab === "profile" && (
             <form
               onSubmit={handleSave}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "1rem",
-                maxWidth: "480px",
-              }}
+              className="flex flex-col gap-4 max-w-[480px]"
             >
               <div>
-                <label
-                  style={{
-                    color: "#cf9db8",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "0.75rem",
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
+                <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                   Full Name
                 </label>
                 <input
-                  style={inputCls}
+                  className={inputCls}
                   value={form.fullName}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, fullName: e.target.value }))
@@ -181,41 +131,21 @@ const ProfilePage = () => {
                 />
               </div>
               <div>
-                <label
-                  style={{
-                    color: "#cf9db8",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "0.75rem",
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
+                <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                   Email (read-only)
                 </label>
                 <input
-                  style={{ ...inputCls, opacity: 0.55 }}
+                  className={`${inputCls} opacity-55`}
                   value={user?.email || ""}
                   readOnly
                 />
               </div>
               <div>
-                <label
-                  style={{
-                    color: "#cf9db8",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "0.75rem",
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
+                <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                   Phone Number
                 </label>
                 <input
-                  style={inputCls}
+                  className={inputCls}
                   value={form.phoneNumber}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, phoneNumber: e.target.value }))
@@ -224,21 +154,11 @@ const ProfilePage = () => {
                 />
               </div>
               <div>
-                <label
-                  style={{
-                    color: "#cf9db8",
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "0.75rem",
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
+                <label className="text-velvet-rose-mist font-inter text-xs tracking-wider uppercase block mb-1">
                   Address
                 </label>
                 <textarea
-                  style={{ ...inputCls, minHeight: "72px", resize: "vertical" }}
+                  className={`${inputCls} min-h-[72px] resize-y`}
                   value={form.address}
                   onChange={(e) =>
                     setForm((p) => ({ ...p, address: e.target.value }))
@@ -249,21 +169,11 @@ const ProfilePage = () => {
               <button
                 type="submit"
                 disabled={saving}
-                style={{
-                  alignSelf: "flex-start",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: saving ? "#2e1f24" : "#553858",
-                  color: "#f3e6ec",
-                  border: "none",
-                  borderRadius: "2px",
-                  padding: "10px 20px",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  cursor: saving ? "not-allowed" : "pointer",
-                }}
+                className={`self-start flex items-center gap-2 text-ivory-blush border-none rounded-sm px-5 py-2.5 font-montserrat font-semibold text-sm ${
+                  saving
+                    ? "bg-midnight-truffle cursor-not-allowed"
+                    : "bg-royal-plum-veil cursor-pointer"
+                }`}
               >
                 <FiSave size={16} /> {saving ? "Saving…" : "Save Changes"}
               </button>
@@ -274,36 +184,21 @@ const ProfilePage = () => {
           {tab === "orders" && (
             <div>
               {orders.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "3rem 0" }}>
+                <div className="text-center py-12">
                   <FiPackage
                     size={48}
-                    style={{ color: "#553858", marginBottom: "1rem" }}
+                    className="text-royal-plum-veil mb-4 inline-block"
                   />
-                  <p
-                    style={{
-                      color: "#cf9db8",
-                      fontFamily: "Poppins, sans-serif",
-                    }}
-                  >
+                  <p className="text-velvet-rose-mist font-poppins">
                     No orders yet.
                   </p>
                 </div>
               ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                  }}
-                >
+                <div className="flex flex-col gap-2.5">
                   {orders.map((order) => (
                     <div
                       key={order.orderId}
-                      style={{
-                        border: "1px solid rgba(207,157,184,0.15)",
-                        borderRadius: "8px",
-                        overflow: "hidden",
-                      }}
+                      className="border border-velvet-rose-mist/15 rounded-lg overflow-hidden"
                     >
                       <div
                         onClick={() =>
@@ -313,31 +208,13 @@ const ProfilePage = () => {
                               : order.orderId,
                           )
                         }
-                        className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 cursor-pointer gap-2 sm:gap-0"
-                        style={{
-                          background: "#2e1f24",
-                        }}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 cursor-pointer gap-2 sm:gap-0 bg-midnight-truffle"
                       >
                         <div>
-                          <p
-                            style={{
-                              color: "#f3e6ec",
-                              fontFamily: "Montserrat, sans-serif",
-                              fontWeight: 600,
-                              fontSize: "0.85rem",
-                              margin: "0 0 2px",
-                            }}
-                          >
+                          <p className="text-ivory-blush font-montserrat font-semibold text-[0.85rem] m-0 mb-0.5">
                             #{order.orderId.slice(-8).toUpperCase()}
                           </p>
-                          <p
-                            style={{
-                              color: "#cf9db8",
-                              fontFamily: "Inter, sans-serif",
-                              fontSize: "0.75rem",
-                              margin: 0,
-                            }}
-                          >
+                          <p className="text-velvet-rose-mist font-inter text-xs m-0">
                             {new Date(order.orderDate).toLocaleDateString(
                               "en-IN",
                               {
@@ -352,25 +229,12 @@ const ProfilePage = () => {
                           <span
                             style={{
                               background: STATUS_COLORS[order.orderStatus],
-                              color: "#fff",
-                              fontSize: "0.7rem",
-                              fontFamily: "Inter, sans-serif",
-                              fontWeight: 600,
-                              padding: "2px 10px",
-                              borderRadius: "20px",
-                              textTransform: "capitalize",
                             }}
+                            className="text-white text-[0.7rem] font-inter font-semibold px-2.5 py-0.5 rounded-full capitalize"
                           >
                             {order.orderStatus}
                           </span>
-                          <span
-                            style={{
-                              color: "#f3e6ec",
-                              fontFamily: "Montserrat, sans-serif",
-                              fontWeight: 700,
-                              fontSize: "0.9rem",
-                            }}
-                          >
+                          <span className="text-ivory-blush font-montserrat font-bold text-[0.9rem]">
                             ₹{order.amount.toLocaleString("en-IN")}
                           </span>
                           {expandedOrder === order.orderId ? (
@@ -384,37 +248,18 @@ const ProfilePage = () => {
                         <motion.div
                           initial={{ height: 0 }}
                           animate={{ height: "auto" }}
-                          style={{
-                            padding: "12px 16px",
-                            borderTop: "1px solid rgba(207,157,184,0.15)",
-                          }}
+                          className="px-4 py-3 border-t border-velvet-rose-mist/15"
                         >
                           {order.items.map((item, i) => (
                             <div
                               key={i}
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                marginBottom: "6px",
-                              }}
+                              className="flex justify-between mb-1.5"
                             >
-                              <span
-                                style={{
-                                  color: "#f3e6ec",
-                                  fontFamily: "Poppins, sans-serif",
-                                  fontSize: "0.8rem",
-                                }}
-                              >
-                                {item.productName} ({item.size}) �-{" "}
+                              <span className="text-ivory-blush font-poppins text-sm">
+                                {item.productName} ({item.size}) ×{" "}
                                 {item.quantity}
                               </span>
-                              <span
-                                style={{
-                                  color: "#cf9db8",
-                                  fontFamily: "Montserrat, sans-serif",
-                                  fontSize: "0.8rem",
-                                }}
-                              >
+                              <span className="text-velvet-rose-mist font-montserrat text-sm">
                                 ₹
                                 {(
                                   item.priceAtOrder * item.quantity
@@ -422,22 +267,8 @@ const ProfilePage = () => {
                               </span>
                             </div>
                           ))}
-                          <div
-                            style={{
-                              marginTop: "8px",
-                              paddingTop: "8px",
-                              borderTop: "1px solid rgba(207,157,184,0.1)",
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <span
-                              style={{
-                                color: "#cf9db8",
-                                fontFamily: "Inter, sans-serif",
-                                fontSize: "0.75rem",
-                              }}
-                            >
+                          <div className="mt-2 pt-2 border-t border-velvet-rose-mist/10 flex justify-between">
+                            <span className="text-velvet-rose-mist font-inter text-xs">
                               Address: {order.address}
                             </span>
                           </div>

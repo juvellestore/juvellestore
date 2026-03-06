@@ -8,7 +8,8 @@ import React, {
 import api from "../api/axios.js";
 import { useAuth } from "./AuthContext.jsx";
 
-const CartContext = createContext(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ export const CartProvider = ({ children }) => {
 
   // Refetch cart when user changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchCart();
   }, [fetchCart]);
 
@@ -78,10 +80,9 @@ export const CartProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = () => {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error("useCart must be used within CartProvider");
   return ctx;
 };
-
-export default CartContext;

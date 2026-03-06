@@ -3,66 +3,26 @@ import Navbar from "../components/Navbar.jsx";
 
 const LegalPage = () => {
   return (
-    <div
-      style={{
-        background: "#2e1f24",
-        minHeight: "100vh",
-        color: "#f3e6ec",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
+    <div className="bg-midnight-truffle min-h-screen text-ivory-blush font-poppins">
       <Navbar />
-      <div
-        className="max-w-[800px] mx-auto px-6 py-12 md:py-20 w-full"
-        style={{ lineHeight: 1.7, color: "#e8c8d8" }}
-      >
+      <div className="max-w-[800px] mx-auto px-6 py-12 md:py-20 w-full leading-[1.7] text-[#e8c8d8]">
         {/* TERMS AND CONDITIONS */}
-        <section style={{ marginBottom: "4rem" }}>
-          <h1
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 700,
-              fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
-              color: "#f3e6ec",
-              marginBottom: "1.5rem",
-              borderBottom: "1px solid rgba(207,157,184,0.2)",
-              paddingBottom: "1rem",
-            }}
-          >
+        <section className="mb-16">
+          <h1 className="font-montserrat font-bold text-[clamp(1.8rem,4vw,2.5rem)] text-ivory-blush mb-6 border-b border-velvet-rose-mist/20 pb-4">
             Terms and Conditions
           </h1>
-          <p
-            style={{
-              fontSize: "0.85rem",
-              marginBottom: "1.5rem",
-              opacity: 0.8,
-            }}
-          >
+          <p className="text-[0.85rem] mb-6 opacity-80">
             Last Updated: {new Date().toLocaleDateString()}
           </p>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.25rem",
-              fontSize: "0.9rem",
-            }}
-          >
+          <div className="flex flex-col gap-5 text-[0.9rem]">
             <p>
               Welcome to Juvelle ("we", "our", "us"). By accessing or using our
               website (www.juvelle.store) and purchasing our clothing products,
               you agree to be bound by the following Terms and Conditions.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               1. Products and Sizing
             </h3>
             <p>
@@ -73,14 +33,7 @@ const LegalPage = () => {
               pages. Slight variations in measurements may occur.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               2. Orders and Acceptance
             </h3>
             <p>
@@ -93,14 +46,7 @@ const LegalPage = () => {
               dispatch the goods.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               3. Pricing and Availability
             </h3>
             <p>
@@ -111,14 +57,7 @@ const LegalPage = () => {
               your order at the correct price or cancel it.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               4. Payments
             </h3>
             <p>
@@ -129,14 +68,7 @@ const LegalPage = () => {
               our servers.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               5. Shipping and Delivery
             </h3>
             <p>
@@ -145,14 +77,7 @@ const LegalPage = () => {
               caused by courier services, strikes, or acts of nature.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               6. Returns and Exchanges
             </h3>
             <p>
@@ -166,42 +91,18 @@ const LegalPage = () => {
 
         {/* PRIVACY POLICY */}
         <section>
-          <h1
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 700,
-              fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
-              color: "#f3e6ec",
-              marginBottom: "1.5rem",
-              borderBottom: "1px solid rgba(207,157,184,0.2)",
-              paddingBottom: "1rem",
-            }}
-          >
+          <h1 className="font-montserrat font-bold text-[clamp(1.8rem,4vw,2.5rem)] text-ivory-blush mb-6 border-b border-velvet-rose-mist/20 pb-4">
             Privacy Policy
           </h1>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.25rem",
-              fontSize: "0.9rem",
-            }}
-          >
+          <div className="flex flex-col gap-5 text-[0.9rem]">
             <p>
               At Juvelle, we are committed to protecting your privacy and
               ensuring the security of your personal data. This Privacy Policy
               outlines how we collect, use, and safeguard your information.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               1. Information We Collect
             </h3>
             <p>
@@ -211,26 +112,10 @@ const LegalPage = () => {
               history.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               2. How We Use Your Information
             </h3>
-            <ul
-              style={{
-                listStyleType: "disc",
-                paddingLeft: "1.5rem",
-                margin: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.25rem",
-              }}
-            >
+            <ul className="list-disc pl-6 m-0 flex flex-col gap-1">
               <li>
                 To process and fulfill your orders (including shipping and
                 payment verification).
@@ -245,14 +130,7 @@ const LegalPage = () => {
               </li>
             </ul>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               3. Data Sharing and Third Parties
             </h3>
             <p>
@@ -260,16 +138,7 @@ const LegalPage = () => {
               We only share necessary data with trusted service providers
               required to operate our business, such as:
             </p>
-            <ul
-              style={{
-                listStyleType: "disc",
-                paddingLeft: "1.5rem",
-                margin: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.25rem",
-              }}
-            >
+            <ul className="list-disc pl-6 m-0 flex flex-col gap-1">
               <li>
                 <strong>Payment Gateways (Razorpay):</strong> To securely
                 process transactions.
@@ -280,14 +149,7 @@ const LegalPage = () => {
               </li>
             </ul>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               4. Data Security
             </h3>
             <p>
@@ -297,14 +159,7 @@ const LegalPage = () => {
               is encrypted via HTTPS.
             </p>
 
-            <h3
-              style={{
-                color: "#f3e6ec",
-                fontSize: "1.1rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <h3 className="text-ivory-blush text-[1.1rem] mt-4 mb-2">
               5. Your Rights
             </h3>
             <p>
@@ -313,25 +168,13 @@ const LegalPage = () => {
               account dashboard or contact us for assistance.
             </p>
 
-            <div
-              style={{
-                marginTop: "1.5rem",
-                padding: "1.5rem",
-                background: "rgba(207,157,184,0.05)",
-                borderRadius: "6px",
-                border: "1px solid rgba(207,157,184,0.2)",
-              }}
-            >
-              <p style={{ margin: 0, color: "#f3e6ec", fontWeight: 500 }}>
+            <div className="mt-6 p-6 bg-velvet-rose-mist/5 rounded-md border border-velvet-rose-mist/20">
+              <p className="m-0 text-ivory-blush font-medium">
                 Contact for Privacy/Legal Concerns:
               </p>
-              <p style={{ margin: "0.5rem 0 0 0" }}>
-                Juvelle Store, owned by Sahil Rahman
-              </p>
-              <p style={{ margin: "0.25rem 0 0 0" }}>
-                Email: juvelle.store@gmail.com
-              </p>
-              <p style={{ margin: "0.25rem 0 0 0" }}>Phone: +91 9061506630</p>
+              <p className="mt-2 mb-0">Juvelle Store, owned by Sahil Rahman</p>
+              <p className="mt-1 mb-0">Email: juvelle.store@gmail.com</p>
+              <p className="mt-1 mb-0">Phone: +91 9061506630</p>
             </div>
           </div>
         </section>
