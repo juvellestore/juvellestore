@@ -31,7 +31,7 @@ function drawFrame(canvas, image) {
   const ih = image.naturalHeight;
   if (!iw || !ih) return;
 
-  // Best-quality interpolation — critical for 1280×720 source images
+  // Best-quality interpolation — critical for 1280�-720 source images
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 
@@ -119,8 +119,21 @@ const styles = {
 // All positioning is done 100% via inline styles — no Tailwind transforms.
 const OVERLAYS = [
   {
+    id: "scrollDown",
+    fadeIn: [0.0, 0.0], // instantly visible at page load
+    fadeOut: [0.03, 0.06], // gone well before 'Woven Meticulously' appears
+    style: {
+      left: "50%",
+      bottom: "18vh",
+      transform: "translateX(-50%)",
+      textAlign: "center",
+      alignItems: "center",
+    },
+    isScrollDown: true,
+  },
+  {
     id: "woven",
-    fadeIn: [0.0, 0.06],
+    fadeIn: [0.06, 0.12],
     fadeOut: [0.18, 0.26],
     style: {
       left: "50%",
@@ -220,7 +233,72 @@ function TextOverlay({ overlay, scrollYProgress }) {
     >
       {/* Dark frosted scrim — ensures text reads on any frame */}
       <div>
-        {overlay.isCTA ? (
+        {overlay.isScrollDown ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.6rem",
+              pointerEvents: "none",
+              background: "rgba(255, 255, 255, 0.12)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 255, 255, 0.25)",
+              borderRadius: "50px",
+              padding: "1rem 1.8rem",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "clamp(0.7rem, 1.6vw, 0.85rem)",
+                fontWeight: 600,
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                color: "#ffffff",
+                margin: 0,
+              }}
+            >
+              Scroll Down
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "3px",
+                animation: "scroll-bounce 1.4s ease-in-out infinite",
+              }}
+            >
+              <svg
+                width="22"
+                height="12"
+                viewBox="0 0 18 10"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="1,1 9,9 17,1" />
+              </svg>
+              <svg
+                width="22"
+                height="12"
+                viewBox="0 0 18 10"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.5)"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="1,1 9,9 17,1" />
+              </svg>
+            </div>
+          </div>
+        ) : overlay.isCTA ? (
           <div
             style={{
               display: "flex",
@@ -569,6 +647,10 @@ export default function ClothScroll() {
         @keyframes cloth-pulse-ring {
           0%, 100% { opacity: 0.3; transform: scale(0.95); }
           50%       { opacity: 1;   transform: scale(1.05); }
+        }
+        @keyframes scroll-bounce {
+          0%, 100% { transform: translateY(0); }
+          50%       { transform: translateY(5px); }
         }
       `}</style>
 

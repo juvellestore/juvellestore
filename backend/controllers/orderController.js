@@ -1,5 +1,6 @@
 import Order from "../models/Order.js";
 import CartItem from "../models/CartItem.js";
+import Product from "../models/Product.js";
 
 // POST /api/orders — place order from current cart
 export const placeOrder = async (req, res) => {
@@ -40,6 +41,36 @@ export const placeOrder = async (req, res) => {
 
   // Clear cart
   await CartItem.deleteMany({ userId: req.user._id });
+
+  // Decrement stock for each purchased item
+  await Promise.all(
+    items.map((item) =>
+      Product.findByIdAndUpdate(item.productId, [
+        {
+          $set: {
+            stockQuantity: {
+              $cond: [
+                { $eq: ["$stockQuantity", null] },
+                null,
+                { $max: [0, { $subtract: ["$stockQuantity", item.quantity] }] },
+              ],
+            },
+          },
+        },
+        {
+          $set: {
+            inStock: {
+              $cond: [
+                { $eq: ["$stockQuantity", null] },
+                true,
+                { $gt: ["$stockQuantity", 0] },
+              ],
+            },
+          },
+        },
+      ]),
+    ),
+  );
 
   res.status(201).json({ success: true, order });
 };

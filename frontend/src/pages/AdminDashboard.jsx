@@ -108,6 +108,7 @@ const ProductFormModal = ({ product, onClose, onSaved }) => {
     sizes: product?.sizes || [],
     inStock: product?.inStock ?? true,
     featured: product?.featured ?? false,
+    stockQuantity: product?.stockQuantity ?? "",
   });
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState(
@@ -273,6 +274,16 @@ const ProductFormModal = ({ product, onClose, onSaved }) => {
               value={form.originalPrice}
               onChange={(e) =>
                 setForm((p) => ({ ...p, originalPrice: e.target.value }))
+              }
+            />
+            <input
+              style={inputCls}
+              type="number"
+              min="0"
+              placeholder="Stock Qty (blank = unlimited)"
+              value={form.stockQuantity}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, stockQuantity: e.target.value }))
               }
             />
           </div>
@@ -715,6 +726,10 @@ const AdminDashboard = () => {
                           }}
                         >
                           ₹{p.price.toLocaleString("en-IN")}{" "}
+                          {p.stockQuantity !== null &&
+                          p.stockQuantity !== undefined
+                            ? `• Stock: ${p.stockQuantity}`
+                            : "• Unlimited stock"}{" "}
                           {p.featured && "• Featured"}{" "}
                           {!p.inStock && "• Out of Stock"}
                         </p>
@@ -1082,7 +1097,7 @@ const AdminDashboard = () => {
                               {order.paymentMethod === "razorpay"
                                 ? "Razorpay"
                                 : "COD"}{" "}
-                              — {order.paymentStatus}
+                              - {order.paymentStatus}
                             </p>
                           </div>
                           <div style={{ gridColumn: "1 / -1" }}>
@@ -1140,7 +1155,7 @@ const AdminDashboard = () => {
                                 fontSize: "0.8rem",
                               }}
                             >
-                              {item.productName} ({item.size}) × {item.quantity}
+                              {item.productName} ({item.size}) �- {item.quantity}
                             </span>
                             <span
                               style={{

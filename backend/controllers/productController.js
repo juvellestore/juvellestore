@@ -53,6 +53,7 @@ export const createProduct = async (req, res) => {
     category,
     inStock,
     featured,
+    stockQuantity,
   } = req.body;
 
   if (!productName || !price)
@@ -79,6 +80,10 @@ export const createProduct = async (req, res) => {
     inStock:
       inStock !== undefined ? inStock === "true" || inStock === true : true,
     featured: featured === "true" || featured === true,
+    stockQuantity:
+      stockQuantity !== undefined && stockQuantity !== ""
+        ? Number(stockQuantity)
+        : null,
   });
 
   res.status(201).json({ success: true, product });
@@ -95,6 +100,7 @@ export const updateProduct = async (req, res) => {
     category,
     inStock,
     featured,
+    stockQuantity,
   } = req.body;
 
   const update = {};
@@ -110,6 +116,8 @@ export const updateProduct = async (req, res) => {
     update.inStock = inStock === "true" || inStock === true;
   if (featured !== undefined)
     update.featured = featured === "true" || featured === true;
+  if (stockQuantity !== undefined)
+    update.stockQuantity = stockQuantity !== "" ? Number(stockQuantity) : null;
 
   // Upload new images to Cloudinary if provided
   if (req.files?.length) {

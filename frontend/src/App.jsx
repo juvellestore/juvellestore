@@ -11,6 +11,8 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
 import MyOrdersPage from "./pages/MyOrdersPage.jsx";
+import AboutPage from "./pages/AboutPage.jsx";
+import LegalPage from "./pages/LegalPage.jsx";
 
 // Redirect to /store if not logged in
 const ProtectedRoute = ({ children }) => {
@@ -33,6 +35,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/store" element={<StorePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/legal" element={<LegalPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route
           path="/cart"

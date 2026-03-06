@@ -27,7 +27,7 @@ const HeroNavbar = () => {
         {/* Brand */}
         <Link
           to="/"
-          className="font-montserrat text-[1.35rem] md:text-[1.7rem] font-normal tracking-[0.12em] text-[#1e0a18] no-underline shrink-0"
+          className="font-montserrat text-[1.6rem] md:text-[2rem] font-bold tracking-[0.12em] text-[#1e0a18] no-underline shrink-0"
         >
           Juvelle
         </Link>
@@ -77,18 +77,18 @@ const HeroNavbar = () => {
 // ─── Hamburger Icon ───────────────────────────────────────────────────────────
 function HamburgerIcon({ open }) {
   const barClass =
-    "block w-[22px] h-[1.5px] bg-[#1e0a18] rounded-[2px] origin-center transition-all duration-300 ease-in-out";
+    "block w-[28px] h-[2px] bg-[#1e0a18] rounded-[2px] origin-center transition-all duration-300 ease-in-out";
   return (
     <div className="flex flex-col gap-[5px] cursor-pointer">
       <span
         className={`${barClass} ${
-          open ? "rotate-45 translate-x-[4.5px] translate-y-[4.5px]" : ""
+          open ? "rotate-45 translate-x-[6px] translate-y-[6px]" : ""
         }`}
       />
       <span className={`${barClass} ${open ? "opacity-0" : "opacity-100"}`} />
       <span
         className={`${barClass} ${
-          open ? "-rotate-45 translate-x-[4.5px] -translate-y-[4.5px]" : ""
+          open ? "-rotate-45 translate-x-[6px] -translate-y-[6px]" : ""
         }`}
       />
     </div>
@@ -100,7 +100,7 @@ function NavLink({ to, label }) {
   return (
     <Link
       to={to}
-      className="font-inter text-[0.8rem] font-medium tracking-[0.2em] uppercase text-[#1e0a18]/60 hover:text-[#1e0a18] hover:bg-midnight-truffle/10 no-underline px-4 py-2 rounded-[2px] transition-colors duration-200 ease-in-out"
+      className="font-inter text-[0.95rem] font-medium tracking-[0.2em] uppercase text-[#1e0a18]/60 hover:text-[#1e0a18] hover:bg-midnight-truffle/10 no-underline px-5 py-2.5 rounded-[2px] transition-colors duration-200 ease-in-out"
     >
       {label}
     </Link>

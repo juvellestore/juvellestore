@@ -1,8 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX } from "react-icons/fi";
+import { FiX, FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext.jsx";
+
+// Reusable password input with show/hide eye toggle
+const PasswordInput = ({
+  className,
+  placeholder,
+  value,
+  onChange,
+  required,
+}) => {
+  const [show, setShow] = useState(false);
+  return (
+    <div style={{ position: "relative" }}>
+      <input
+        className={className}
+        type={show ? "text" : "password"}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required={required}
+        style={{ paddingRight: "2.5rem" }}
+      />
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        tabIndex={-1}
+        aria-label={show ? "Hide password" : "Show password"}
+        style={{
+          position: "absolute",
+          right: "12px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          color: "#cf9db8",
+          display: "flex",
+          alignItems: "center",
+          padding: 0,
+        }}
+      >
+        {show ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+      </button>
+    </div>
+  );
+};
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [tab, setTab] = useState("login");
@@ -17,7 +62,6 @@ const AuthModal = ({ isOpen, onClose }) => {
     confirmPassword: "",
   });
 
-  // Reset forms when modal opens
   useEffect(() => {
     if (isOpen) {
       setLoginForm({ email: "", password: "" });
@@ -76,11 +120,37 @@ const AuthModal = ({ isOpen, onClose }) => {
   const inputCls =
     "w-full bg-cocoa-orchid border border-velvet-rose-mist text-ivory-blush placeholder:text-velvet-rose-mist/60 rounded-lg px-4 py-2.5 text-sm font-poppins outline-none focus:border-ivory-blush transition duration-200";
 
+  const spinnerStyle = {
+    width: "14px",
+    height: "14px",
+    border: "2px solid #cf9db8",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 0.7s linear infinite",
+    display: "inline-block",
+  };
+
+  const submitBtnStyle = (loading) => ({
+    background: loading ? "#413038" : "#553858",
+    color: "#f3e6ec",
+    border: "none",
+    borderRadius: "4px",
+    padding: "10px",
+    fontFamily: "Montserrat, sans-serif",
+    fontWeight: 600,
+    fontSize: "0.875rem",
+    cursor: loading ? "not-allowed" : "pointer",
+    transition: "background 0.2s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+  });
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop + centering wrapper */}
           <motion.div
             key="backdrop"
             initial={{ opacity: 0 }}
@@ -99,7 +169,6 @@ const AuthModal = ({ isOpen, onClose }) => {
               padding: "1rem",
             }}
           >
-            {/* Modal — centered by the flex backdrop above */}
             <motion.div
               key="modal"
               initial={{ opacity: 0, scale: 0.92, y: 20 }}
@@ -107,11 +176,7 @@ const AuthModal = ({ isOpen, onClose }) => {
               exit={{ opacity: 0, scale: 0.92, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                width: "100%",
-                maxWidth: "400px",
-                zIndex: 51,
-              }}
+              style={{ width: "100%", maxWidth: "400px", zIndex: 51 }}
             >
               <div
                 style={{
@@ -209,9 +274,8 @@ const AuthModal = ({ isOpen, onClose }) => {
                       }
                       required
                     />
-                    <input
+                    <PasswordInput
                       className={inputCls}
-                      type="password"
                       placeholder="Password"
                       value={loginForm.password}
                       onChange={(e) =>
@@ -225,36 +289,11 @@ const AuthModal = ({ isOpen, onClose }) => {
                     <button
                       type="submit"
                       disabled={loading}
-                      style={{
-                        background: loading ? "#413038" : "#553858",
-                        color: "#f3e6ec",
-                        border: "none",
-                        borderRadius: "4px",
-                        padding: "10px",
-                        fontFamily: "Montserrat, sans-serif",
-                        fontWeight: 600,
-                        fontSize: "0.875rem",
-                        cursor: loading ? "not-allowed" : "pointer",
-                        transition: "background 0.2s",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                      }}
+                      style={submitBtnStyle(loading)}
                     >
                       {loading ? (
                         <>
-                          <span
-                            style={{
-                              width: "14px",
-                              height: "14px",
-                              border: "2px solid #cf9db8",
-                              borderTopColor: "transparent",
-                              borderRadius: "50%",
-                              animation: "spin 0.7s linear infinite",
-                              display: "inline-block",
-                            }}
-                          />
+                          <span style={spinnerStyle} />
                           Signing in…
                         </>
                       ) : (
@@ -299,9 +338,8 @@ const AuthModal = ({ isOpen, onClose }) => {
                       }
                       required
                     />
-                    <input
+                    <PasswordInput
                       className={inputCls}
-                      type="password"
                       placeholder="Password (min 8 chars)"
                       value={registerForm.password}
                       onChange={(e) =>
@@ -312,9 +350,8 @@ const AuthModal = ({ isOpen, onClose }) => {
                       }
                       required
                     />
-                    <input
+                    <PasswordInput
                       className={inputCls}
-                      type="password"
                       placeholder="Confirm password"
                       value={registerForm.confirmPassword}
                       onChange={(e) =>
@@ -328,36 +365,11 @@ const AuthModal = ({ isOpen, onClose }) => {
                     <button
                       type="submit"
                       disabled={loading}
-                      style={{
-                        background: loading ? "#413038" : "#553858",
-                        color: "#f3e6ec",
-                        border: "none",
-                        borderRadius: "4px",
-                        padding: "10px",
-                        fontFamily: "Montserrat, sans-serif",
-                        fontWeight: 600,
-                        fontSize: "0.875rem",
-                        cursor: loading ? "not-allowed" : "pointer",
-                        transition: "background 0.2s",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                      }}
+                      style={submitBtnStyle(loading)}
                     >
                       {loading ? (
                         <>
-                          <span
-                            style={{
-                              width: "14px",
-                              height: "14px",
-                              border: "2px solid #cf9db8",
-                              borderTopColor: "transparent",
-                              borderRadius: "50%",
-                              animation: "spin 0.7s linear infinite",
-                              display: "inline-block",
-                            }}
-                          />
+                          <span style={spinnerStyle} />
                           Creating account…
                         </>
                       ) : (

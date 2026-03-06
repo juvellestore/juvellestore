@@ -2,6 +2,7 @@ import crypto from "crypto";
 import Razorpay from "razorpay";
 import Order from "../models/Order.js";
 import CartItem from "../models/CartItem.js";
+import Product from "../models/Product.js";
 
 // POST /api/payment/create-order
 // Only creates a Razorpay order — does NOT write to our DB yet.
@@ -65,13 +66,11 @@ export const createRazorpayOrder = async (req, res) => {
       "Razorpay order error:",
       error?.error || error?.message || error,
     );
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to create Razorpay order",
-        detail: error?.error?.description || undefined,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Failed to create Razorpay order",
+      detail: error?.error?.description || undefined,
+    });
   }
 };
 
@@ -154,6 +153,41 @@ export const verifyPayment = async (req, res) => {
 
       // Clear the user's cart
       await CartItem.deleteMany({ userId: req.user._id });
+
+      // Decrement stock for each purchased item
+      await Promise.all(
+        items.map((item) =>
+          Product.findByIdAndUpdate(item.productId, [
+            {
+              $set: {
+                stockQuantity: {
+                  $cond: [
+                    { $eq: ["$stockQuantity", null] },
+                    null, // unlimited — don't touch
+                    {
+                      $max: [
+                        0,
+                        { $subtract: ["$stockQuantity", item.quantity] },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              $set: {
+                inStock: {
+                  $cond: [
+                    { $eq: ["$stockQuantity", null] },
+                    true,
+                    { $gt: ["$stockQuantity", 0] },
+                  ],
+                },
+              },
+            },
+          ]),
+        ),
+      );
 
       res.status(200).json({
         success: true,

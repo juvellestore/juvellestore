@@ -405,7 +405,7 @@ const ProfilePage = () => {
                                   fontSize: "0.8rem",
                                 }}
                               >
-                                {item.productName} ({item.size}) Ã—{" "}
+                                {item.productName} ({item.size}) Ã-{" "}
                                 {item.quantity}
                               </span>
                               <span

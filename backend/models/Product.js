@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   category: { type: String, default: "churidar" },
   inStock: { type: Boolean, default: true },
+  stockQuantity: { type: Number, default: null }, // null = unlimited
   featured: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });

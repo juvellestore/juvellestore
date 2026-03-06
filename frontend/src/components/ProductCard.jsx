@@ -41,7 +41,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
     setAdding(true);
     try {
       await addToCart(product._id, size, 1);
-      toast.success(`Added to cart — ${size}`);
+      toast.success(`Added to cart - ${size}`);
     } catch {
       toast.error("Could not add to cart");
     } finally {

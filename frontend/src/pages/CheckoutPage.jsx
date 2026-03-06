@@ -538,7 +538,7 @@ const CheckoutPage = () => {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {item.productId?.productName} Ã— {item.quantity}
+                    {item.productId?.productName} Ã- {item.quantity}
                   </p>
                   <p
                     style={{
