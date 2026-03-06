@@ -8,199 +8,99 @@ const NAV_LINKS = [
   { label: "Legal", to: "/legal" },
 ];
 
-// ─── Hook: track viewport width in JS (no Tailwind breakpoint dependency) ────
-function useWindowWidth() {
-  const [width, setWidth] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth : 1024,
-  );
-  useEffect(() => {
-    const handler = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handler);
-    return () => window.removeEventListener("resize", handler);
-  }, []);
-  return width;
-}
-
-// ─── Hamburger Icon ───────────────────────────────────────────────────────────
-function HamburgerIcon({ open }) {
-  const bar = (rotate, y) => ({
-    display: "block",
-    width: "22px",
-    height: "1.5px",
-    background: "#1e0a18",
-    borderRadius: "2px",
-    transformOrigin: "center",
-    transition: "transform 0.3s ease, opacity 0.3s ease",
-    transform: rotate,
-    opacity: y,
-  });
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "5px",
-        cursor: "pointer",
-      }}
-    >
-      <span
-        style={bar(open ? "rotate(45deg) translate(4.5px, 4.5px)" : "none", 1)}
-      />
-      <span style={bar("none", open ? 0 : 1)} />
-      <span
-        style={bar(
-          open ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
-          1,
-        )}
-      />
-    </div>
-  );
-}
-
-// ─── Main Navbar ──────────────────────────────────────────────────────────────
 const HeroNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const width = useWindowWidth();
-  const isDesktop = width >= 768;
 
-  // Close drawer when resizing to desktop
+  // Close mobile menu if window resizes to desktop width
   useEffect(() => {
-    if (isDesktop) setMobileOpen(false);
-  }, [isDesktop]);
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setMobileOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
       {/* ── Top bar ───────────────────────────────────────────────────────── */}
-      <nav
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 9000,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: isDesktop ? "1.25rem 2.5rem" : "1rem 1.25rem",
-          background: "transparent",
-          backdropFilter: "none",
-        }}
-      >
+      <nav className="fixed top-0 left-0 right-0 z-[9000] flex items-center justify-between px-5 py-4 md:px-10 md:py-5 bg-transparent w-full">
         {/* Brand */}
         <Link
           to="/"
-          style={{
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: isDesktop ? "1.7rem" : "1.35rem",
-            fontWeight: 400,
-            letterSpacing: "0.12em",
-            color: "#1e0a18",
-            textDecoration: "none",
-            flexShrink: 0,
-          }}
+          className="font-montserrat text-[1.35rem] md:text-[1.7rem] font-normal tracking-[0.12em] text-[#1e0a18] no-underline shrink-0"
         >
           Juvelle
         </Link>
 
         {/* Desktop links */}
-        {isDesktop && (
-          <div style={{ display: "flex", gap: "0.1rem", alignItems: "center" }}>
-            {NAV_LINKS.map((link) => (
-              <NavLink key={link.label} to={link.to} label={link.label} />
-            ))}
-          </div>
-        )}
+        <div className="hidden md:flex gap-1 items-center">
+          {NAV_LINKS.map((link) => (
+            <NavLink key={link.label} to={link.to} label={link.label} />
+          ))}
+        </div>
 
         {/* Mobile burger */}
-        {!isDesktop && (
-          <button
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Toggle menu"
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "0.3rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <HamburgerIcon open={mobileOpen} />
-          </button>
-        )}
+        <button
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-label="Toggle menu"
+          className="md:hidden bg-transparent border-none cursor-pointer p-1 outline-none"
+        >
+          <HamburgerIcon open={mobileOpen} />
+        </button>
       </nav>
 
       {/* ── Mobile full-screen drawer ─────────────────────────────────────── */}
-      {!isDesktop && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 8999,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "2.5rem",
-            background: "rgba(46,31,36,0.97)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            // Slide in/out
-            opacity: mobileOpen ? 1 : 0,
-            pointerEvents: mobileOpen ? "all" : "none",
-            transform: mobileOpen ? "translateY(0)" : "translateY(-8px)",
-            transition: "opacity 0.3s ease, transform 0.35s ease",
-          }}
-        >
-          {NAV_LINKS.map((link, i) => (
-            <Link
-              key={link.label}
-              to={link.to}
-              onClick={() => setMobileOpen(false)}
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: "clamp(1.6rem, 7vw, 2.8rem)",
-                fontWeight: 200,
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
-                color: "#f3e6ec",
-                textDecoration: "none",
-                opacity: 0.9,
-                // Staggered fade hint
-                transition: `opacity 0.25s ease ${i * 0.05}s`,
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      <div
+        className={`fixed inset-0 z-[8999] flex flex-col items-center justify-center gap-10 bg-midnight-truffle/95 backdrop-blur-xl transition-all duration-350 ease-in-out md:hidden ${
+          mobileOpen
+            ? "opacity-100 pointer-events-auto translate-y-0"
+            : "opacity-0 pointer-events-none -translate-y-2"
+        }`}
+        style={{ WebkitBackdropFilter: "blur(20px)" }}
+      >
+        {NAV_LINKS.map((link, i) => (
+          <Link
+            key={link.label}
+            to={link.to}
+            onClick={() => setMobileOpen(false)}
+            className="font-montserrat text-[clamp(1.6rem,7vw,2.8rem)] font-extralight tracking-[0.3em] uppercase text-ivory-blush no-underline opacity-90 hover:opacity-100"
+            style={{ transition: `opacity 0.25s ease ${i * 0.05}s` }}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
     </>
   );
 };
 
+// ─── Hamburger Icon ───────────────────────────────────────────────────────────
+function HamburgerIcon({ open }) {
+  const barClass =
+    "block w-[22px] h-[1.5px] bg-[#1e0a18] rounded-[2px] origin-center transition-all duration-300 ease-in-out";
+  return (
+    <div className="flex flex-col gap-[5px] cursor-pointer">
+      <span
+        className={`${barClass} ${
+          open ? "rotate-45 translate-x-[4.5px] translate-y-[4.5px]" : ""
+        }`}
+      />
+      <span className={`${barClass} ${open ? "opacity-0" : "opacity-100"}`} />
+      <span
+        className={`${barClass} ${
+          open ? "-rotate-45 translate-x-[4.5px] -translate-y-[4.5px]" : ""
+        }`}
+      />
+    </div>
+  );
+}
+
 // ─── Desktop link with hover state ───────────────────────────────────────────
 function NavLink({ to, label }) {
-  const [hovered, setHovered] = useState(false);
   return (
     <Link
       to={to}
-      style={{
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "0.8rem",
-        fontWeight: 500,
-        letterSpacing: "0.2em",
-        textTransform: "uppercase",
-        color: hovered ? "#1e0a18" : "rgba(30,10,24,0.6)",
-        textDecoration: "none",
-        padding: "0.5rem 1rem",
-        borderRadius: "2px",
-        background: hovered ? "rgba(46,31,36,0.1)" : "transparent",
-        transition: "color 0.25s ease, background 0.25s ease",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="font-inter text-[0.8rem] font-medium tracking-[0.2em] uppercase text-[#1e0a18]/60 hover:text-[#1e0a18] hover:bg-midnight-truffle/10 no-underline px-4 py-2 rounded-[2px] transition-colors duration-200 ease-in-out"
     >
       {label}
     </Link>

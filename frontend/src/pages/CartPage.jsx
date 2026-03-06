@@ -39,9 +39,7 @@ const CartPage = () => {
   return (
     <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
       <Navbar />
-      <div
-        style={{ maxWidth: "900px", margin: "0 auto", padding: "2rem 1.5rem" }}
-      >
+      <div className="max-w-[900px] mx-auto px-4 py-8 sm:px-6 w-full">
         <Link
           to="/store"
           style={{
@@ -114,18 +112,9 @@ const CartPage = () => {
             </Link>
           </motion.div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: "2rem",
-              alignItems: "start",
-            }}
-          >
+          <div className="flex flex-col md:grid md:grid-cols-[1fr_auto] gap-8 items-start w-full">
             {/* Items */}
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-            >
+            <div className="flex flex-col gap-4 w-full">
               {cartItems.map((item) => {
                 const product = item.productId;
                 const imgSrc = product?.images?.[0]
@@ -137,10 +126,8 @@ const CartPage = () => {
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -12 }}
+                    className="flex flex-row gap-3 sm:gap-4 items-center w-full"
                     style={{
-                      display: "flex",
-                      gap: "1rem",
-                      alignItems: "center",
                       background: "#413038",
                       borderRadius: "8px",
                       padding: "1rem",
@@ -297,14 +284,12 @@ const CartPage = () => {
 
             {/* Summary */}
             <div
+              className="w-full md:min-w-[220px] lg:min-w-[280px] md:sticky top-[80px]"
               style={{
-                minWidth: "220px",
                 background: "#413038",
                 borderRadius: "8px",
                 padding: "1.5rem",
                 border: "1px solid rgba(207,157,184,0.2)",
-                position: "sticky",
-                top: "80px",
               }}
             >
               <h2

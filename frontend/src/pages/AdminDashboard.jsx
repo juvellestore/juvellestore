@@ -5,7 +5,6 @@ import {
   FiPackage,
   FiUsers,
   FiShoppingBag,
-  FiDollarSign,
   FiPlus,
   FiEdit2,
   FiTrash2,
@@ -589,12 +588,6 @@ const AdminDashboard = () => {
               value={stats.totalUsers}
               color="#413038"
             />
-            <StatCard
-              icon={FiDollarSign}
-              label="Revenue (₹)"
-              value={`₹${stats.totalRevenue.toLocaleString("en-IN")}`}
-              color="#4a7c59"
-            />
           </div>
         )}
 
@@ -819,32 +812,65 @@ const AdminDashboard = () => {
                             margin: "0 0 2px",
                           }}
                         >
-                          #{order.orderId.slice(-8).toUpperCase()}
+                          #{order.orderId.split("-")[0].toUpperCase()}
                         </p>
                         <p
                           style={{
                             color: "#cf9db8",
                             fontFamily: "Inter, sans-serif",
                             fontSize: "0.72rem",
+                            margin: "0 0 2px",
+                          }}
+                        >
+                          {order.userId?.fullName || order.fullName}
+                        </p>
+                        <p
+                          style={{
+                            color: "#9d7c85",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.68rem",
                             margin: 0,
                           }}
                         >
-                          {order.userId?.fullName || order.fullName} •{" "}
-                          {new Date(order.orderDate).toLocaleDateString(
-                            "en-IN",
-                          )}
+                          {new Date(order.orderDate).toLocaleString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
                         </p>
                       </div>
-                      <span
-                        style={{
-                          color: "#f3e6ec",
-                          fontFamily: "Montserrat, sans-serif",
-                          fontWeight: 600,
-                          fontSize: "0.85rem",
-                        }}
-                      >
-                        ₹{order.amount.toLocaleString("en-IN")}
-                      </span>
+                      <div style={{ textAlign: "right" }}>
+                        <span
+                          style={{
+                            color: "#f3e6ec",
+                            fontFamily: "Montserrat, sans-serif",
+                            fontWeight: 700,
+                            fontSize: "0.88rem",
+                            display: "block",
+                          }}
+                        >
+                          ₹{order.amount.toLocaleString("en-IN")}
+                        </span>
+                        <span
+                          style={{
+                            color:
+                              order.paymentStatus === "paid"
+                                ? "#4a7c59"
+                                : "#9d7c85",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.65rem",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {order.paymentMethod === "razorpay"
+                            ? "Razorpay"
+                            : "COD"}{" "}
+                          · {order.paymentStatus}
+                        </span>
+                      </div>
                       {/* Status dropdown */}
                       <select
                         value={order.orderStatus}
@@ -885,6 +911,219 @@ const AdminDashboard = () => {
                           borderTop: "1px solid rgba(207,157,184,0.1)",
                         }}
                       >
+                        {/* Customer Info */}
+                        <div
+                          style={{
+                            background: "rgba(207,157,184,0.06)",
+                            borderRadius: "6px",
+                            padding: "10px 12px",
+                            marginBottom: "10px",
+                            display: "grid",
+                            gridTemplateColumns:
+                              "repeat(auto-fill, minmax(180px, 1fr))",
+                            gap: "6px 16px",
+                          }}
+                        >
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Order ID
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.78rem",
+                                margin: 0,
+                                wordBreak: "break-all",
+                                opacity: 0.8,
+                              }}
+                            >
+                              {order.orderId}
+                            </p>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Date &amp; Time
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                              }}
+                            >
+                              {new Date(order.orderDate).toLocaleString(
+                                "en-IN",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                  hour12: true,
+                                },
+                              )}
+                            </p>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Customer
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                              }}
+                            >
+                              {order.fullName}
+                            </p>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Email
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                              }}
+                            >
+                              {order.email}
+                            </p>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Phone
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                              }}
+                            >
+                              {order.phoneNumber}
+                            </p>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Payment
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {order.paymentMethod === "razorpay"
+                                ? "Razorpay"
+                                : "COD"}{" "}
+                              — {order.paymentStatus}
+                            </p>
+                          </div>
+                          <div style={{ gridColumn: "1 / -1" }}>
+                            <p
+                              style={{
+                                color: "#cf9db8",
+                                fontFamily: "Inter, sans-serif",
+                                fontSize: "0.68rem",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.05em",
+                                margin: "0 0 2px",
+                              }}
+                            >
+                              Delivery Address
+                            </p>
+                            <p
+                              style={{
+                                color: "#f3e6ec",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "0.8rem",
+                                margin: 0,
+                              }}
+                            >
+                              📍 {order.address}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Order Items */}
+                        <p
+                          style={{
+                            color: "#cf9db8",
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "0.72rem",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.05em",
+                            margin: "0 0 6px",
+                          }}
+                        >
+                          Items
+                        </p>
                         {order.items.map((item, i) => (
                           <div
                             key={i}
@@ -917,16 +1156,6 @@ const AdminDashboard = () => {
                             </span>
                           </div>
                         ))}
-                        <p
-                          style={{
-                            color: "#cf9db8",
-                            fontFamily: "Inter, sans-serif",
-                            fontSize: "0.75rem",
-                            marginTop: "8px",
-                          }}
-                        >
-                          📍 {order.address}
-                        </p>
                       </motion.div>
                     )}
                   </div>

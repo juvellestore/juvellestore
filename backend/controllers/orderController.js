@@ -5,12 +5,10 @@ import CartItem from "../models/CartItem.js";
 export const placeOrder = async (req, res) => {
   const { fullName, phoneNumber, address, paymentStatus } = req.body;
   if (!fullName || !phoneNumber || !address)
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "fullName, phoneNumber, and address are required",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "fullName, phoneNumber, and address are required",
+    });
 
   const cartItems = await CartItem.find({ userId: req.user._id }).populate(
     "productId",
@@ -36,6 +34,7 @@ export const placeOrder = async (req, res) => {
     address: address.trim(),
     items,
     amount,
+    paymentMethod: "cod",
     paymentStatus: paymentStatus || "pending",
   });
 

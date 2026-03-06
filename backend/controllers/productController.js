@@ -1,15 +1,15 @@
 import { v2 as cloudinary } from "cloudinary";
 import Product from "../models/Product.js";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 // Upload a single file buffer to Cloudinary, returns the secure URL
 const uploadToCloudinary = (buffer) =>
   new Promise((resolve, reject) => {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
     const stream = cloudinary.uploader.upload_stream(
       { folder: "juvelle" },
       (error, result) => {

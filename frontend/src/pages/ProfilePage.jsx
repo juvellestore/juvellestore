@@ -101,9 +101,7 @@ const ProfilePage = () => {
   return (
     <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
       <Navbar />
-      <div
-        style={{ maxWidth: "860px", margin: "0 auto", padding: "2rem 1.5rem" }}
-      >
+      <div className="max-w-[860px] mx-auto px-4 py-8 sm:px-6 w-full">
         <h1
           style={{
             color: "#f3e6ec",
@@ -315,12 +313,8 @@ const ProfilePage = () => {
                               : order.orderId,
                           )
                         }
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 cursor-pointer gap-2 sm:gap-0"
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: "12px 16px",
-                          cursor: "pointer",
                           background: "#2e1f24",
                         }}
                       >
@@ -354,13 +348,7 @@ const ProfilePage = () => {
                             )}
                           </p>
                         </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "12px",
-                          }}
-                        >
+                        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
                           <span
                             style={{
                               background: STATUS_COLORS[order.orderStatus],

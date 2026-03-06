@@ -9,6 +9,8 @@ import CartPage from "./pages/CartPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import OrderSuccessPage from "./pages/OrderSuccessPage.jsx";
+import MyOrdersPage from "./pages/MyOrdersPage.jsx";
 
 // Redirect to /store if not logged in
 const ProtectedRoute = ({ children }) => {
@@ -53,6 +55,22 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order-success"
+          element={
+            <ProtectedRoute>
+              <OrderSuccessPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <ProtectedRoute>
+              <MyOrdersPage />
             </ProtectedRoute>
           }
         />

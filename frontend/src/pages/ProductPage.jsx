@@ -93,9 +93,7 @@ const ProductPage = () => {
   return (
     <div style={{ background: "#2e1f24", minHeight: "100vh" }}>
       <Navbar />
-      <div
-        style={{ maxWidth: "1100px", margin: "0 auto", padding: "2rem 1.5rem" }}
-      >
+      <div className="max-w-[1100px] mx-auto px-4 py-8 sm:px-6 w-full">
         {/* Breadcrumb */}
         <Link
           to="/store"
@@ -113,14 +111,7 @@ const ProductPage = () => {
           <FiArrowLeft size={16} /> Back to Collection
         </Link>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "3rem",
-            alignItems: "start",
-          }}
-        >
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-start w-full">
           {/* Image gallery */}
           <div>
             <motion.div
@@ -566,10 +557,6 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
-
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
-
-      <style>{`@media (max-width: 640px) { .product-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
   );
 };

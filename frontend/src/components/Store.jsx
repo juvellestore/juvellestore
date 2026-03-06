@@ -86,13 +86,10 @@ const Store = ({ onOpenAuth }) => {
 
   return (
     <div
-      style={{
-        minHeight: "calc(100vh - 53px)",
-        background: "#2e1f24",
-        padding: "2rem 1.5rem",
-      }}
+      className="min-h-[calc(100vh-53px)] px-4 py-8 sm:px-6 w-full"
+      style={{ background: "#2e1f24" }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div className="max-w-[1200px] mx-auto w-full">
         {/* Header + Sort */}
         <div
           style={{
@@ -159,13 +156,7 @@ const Store = ({ onOpenAuth }) => {
 
         {/* Grid */}
         {loading ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: "1.25rem",
-            }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
             {Array.from({ length: 6 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -196,13 +187,7 @@ const Store = ({ onOpenAuth }) => {
             </p>
           </motion.div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: "1.25rem",
-            }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
             {products.map((p) => (
               <ProductCard key={p._id} product={p} onOpenAuth={onOpenAuth} />
             ))}
