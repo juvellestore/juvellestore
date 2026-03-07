@@ -2,7 +2,7 @@ import Order from "../models/Order.js";
 import CartItem from "../models/CartItem.js";
 import Product from "../models/Product.js";
 
-// POST /api/orders — place order from current cart
+// POST /api/orders - place order from current cart
 export const placeOrder = async (req, res) => {
   const { fullName, phoneNumber, address, paymentStatus } = req.body;
   if (!fullName || !phoneNumber || !address)

@@ -11,7 +11,7 @@ import { verifyToken, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// multer 2.x: use memoryStorage — files go to Cloudinary, not disk
+// multer 2.x: use memoryStorage - files go to Cloudinary, not disk
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB

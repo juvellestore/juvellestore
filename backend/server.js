@@ -57,7 +57,7 @@ app.get("/", (req, res) => res.json({ message: "Juvelle API is running" }));
 // Error handler (must be last)
 app.use(errorHandler);
 
-// Local dev only — Vercel manages the HTTP server in production
+// Local dev only - Vercel manages the HTTP server in production
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

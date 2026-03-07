@@ -5,7 +5,7 @@ import CartItem from "../models/CartItem.js";
 import Product from "../models/Product.js";
 
 // POST /api/payment/create-order
-// Only creates a Razorpay order — does NOT write to our DB yet.
+// Only creates a Razorpay order - does NOT write to our DB yet.
 // The Order is created in DB only after payment is verified.
 export const createRazorpayOrder = async (req, res) => {
   const { fullName, phoneNumber, address } = req.body;

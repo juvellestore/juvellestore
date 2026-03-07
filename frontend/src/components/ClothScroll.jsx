@@ -20,7 +20,7 @@ const frameUrls = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
 // We compensate by sliding the image 40 px to the right on the canvas.
 // To avoid exposing the left canvas edge, we compute the minimum scale that
 // guarantees at least 40 px of horizontal excess, then take the max of that
-// and the normal cover scale — so wide (width-driven) viewports zoom barely
+// and the normal cover scale - so wide (width-driven) viewports zoom barely
 // more than needed while tall (height-driven) viewports are barely affected.
 const NUDGE_PX = 25;
 
@@ -33,7 +33,7 @@ function drawFrame(canvas, image) {
   const ih = image.naturalHeight;
   if (!iw || !ih) return;
 
-  // Best-quality interpolation — critical for 1280�-720 source images
+  // Best-quality interpolation - critical for 1280-720 source images
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 

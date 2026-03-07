@@ -17,7 +17,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Don't redirect for auth endpoints — a 401 there just means bad credentials
+    // Don't redirect for auth endpoints - a 401 there just means bad credentials
     const isAuthEndpoint = error.config?.url?.startsWith("/api/auth/");
     if (error.response?.status === 401 && !isAuthEndpoint) {
       localStorage.removeItem("juvelle_token");

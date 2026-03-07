@@ -1,4 +1,4 @@
-# Juvelle — Deployment Guide
+# Juvelle - Deployment Guide
 
 **Backend** → [Vercel](https://vercel.com) (serverless Node.js, always-on)
 **Frontend** → [Vercel](https://vercel.com) (static Vite/React)
