@@ -1,5 +1,6 @@
 ﻿import React, { useRef, useEffect, useState, useCallback } from "react";
 // eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -242,13 +243,11 @@ function TextOverlay({ overlay, scrollYProgress }) {
               alignItems: "center",
               gap: "0.6rem",
               pointerEvents: "none",
-              background: "rgba(255, 255, 255, 0.12)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: "1px solid rgba(255, 255, 255, 0.25)",
+              background: "rgba(85, 56, 88, 0.9)",
+              border: "1px solid rgba(207, 157, 184, 0.4)",
               borderRadius: "50px",
               padding: "1rem 1.8rem",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+              boxShadow: "0 8px 32px rgba(46, 31, 36, 0.4)",
             }}
           >
             <p
@@ -258,7 +257,7 @@ function TextOverlay({ overlay, scrollYProgress }) {
                 fontWeight: 600,
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
-                color: "#ffffff",
+                color: "#f3e6ec",
                 margin: 0,
               }}
             >
@@ -278,7 +277,7 @@ function TextOverlay({ overlay, scrollYProgress }) {
                 height="12"
                 viewBox="0 0 18 10"
                 fill="none"
-                stroke="#ffffff"
+                stroke="#cf9db8"
                 strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -290,7 +289,7 @@ function TextOverlay({ overlay, scrollYProgress }) {
                 height="12"
                 viewBox="0 0 18 10"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.5)"
+                stroke="rgba(207, 157, 184, 0.5)"
                 strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
