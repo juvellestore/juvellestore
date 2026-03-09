@@ -121,6 +121,23 @@ const ProductCard = ({ product, onOpenAuth }) => {
             )}
           </div>
 
+          {/* Stock Info */}
+          {product.inStock &&
+            product.stockQuantity !== undefined &&
+            product.stockQuantity !== null && (
+              <div className="mb-3">
+                <span
+                  className={`text-[0.75rem] font-inter font-medium px-2 py-0.5 rounded-sm ${
+                    product.stockQuantity <= 5
+                      ? "bg-red-500/10 text-red-400 border border-red-500/20"
+                      : "bg-green-500/10 text-green-400 border border-green-500/20"
+                  }`}
+                >
+                  {product.stockQuantity} in stock
+                </span>
+              </div>
+            )}
+
           {/* Add to cart button */}
           <div className="relative">
             <button

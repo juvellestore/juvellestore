@@ -1,5 +1,7 @@
 ### To-dos
 
-- Test
-- Fix laggy scroll
-- Fix fonts
+- Test (mobile + PC)
+- Bill PDF generation
+- Shipping label PDF generation
+- New layout
+- New logo

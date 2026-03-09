@@ -229,6 +229,35 @@ const ProductPage = () => {
               </p>
             )}
 
+            {/* Stock Info */}
+            <div className="mb-6 flex gap-3 items-center">
+              {product.inStock ? (
+                <>
+                  <div className="flex items-center gap-1.5 text-green-400 font-inter text-sm font-medium">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    In Stock
+                  </div>
+                  {product.stockQuantity !== undefined &&
+                    product.stockQuantity !== null && (
+                      <span
+                        className={`text-xs font-inter font-medium px-2 py-0.5 rounded-sm border ${
+                          product.stockQuantity <= 5
+                            ? "bg-red-500/10 text-red-400 border-red-500/30"
+                            : "bg-green-500/10 text-green-400 border-green-500/30"
+                        }`}
+                      >
+                        {product.stockQuantity} left
+                      </span>
+                    )}
+                </>
+              ) : (
+                <div className="flex items-center gap-1.5 text-red-400 font-inter text-sm font-medium">
+                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  Out of Stock
+                </div>
+              )}
+            </div>
+
             {/* Sizing Chart */}
             <div className="mb-6">
               <p className="text-ivory-blush font-inter text-sm font-semibold mb-2.5 tracking-[0.05em] uppercase">
