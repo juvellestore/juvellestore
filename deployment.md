@@ -14,7 +14,7 @@
 
 ---
 
-## Step 1 — Push to GitHub
+## Step 1 - Push to GitHub
 
 ```bash
 git init
@@ -28,9 +28,9 @@ git push -u origin main
 
 ---
 
-## Part A — Deploy the Backend on Vercel
+## Part A - Deploy the Backend on Vercel
 
-### Step 2 — Add `vercel.json` to the backend
+### Step 2 - Add `vercel.json` to the backend
 
 Create `backend/vercel.json`:
 
@@ -50,7 +50,7 @@ git commit -m "add vercel config for backend"
 git push
 ```
 
-### Step 3 — Import the backend on Vercel
+### Step 3 - Import the backend on Vercel
 
 1. Go to [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
 2. Select your `juvelle` repository
@@ -65,11 +65,11 @@ git push
 | `MONGODB_URI`   | your full Atlas connection string                                  |
 | `JWT_SECRET`    | your secret key                                                    |
 | `NODE_ENV`      | `production`                                                       |
-| `CLIENT_ORIGIN` | _(your frontend Vercel URL — add after Step 6, no trailing slash)_ |
+| `CLIENT_ORIGIN` | _(your frontend Vercel URL - add after Step 6, no trailing slash)_ |
 
 8. Click **Deploy**
 
-### Step 4 — Note your Backend URL
+### Step 4 - Note your Backend URL
 
 Copy the URL from your Vercel backend project dashboard:
 
@@ -81,9 +81,9 @@ You will need this in Step 6.
 
 ---
 
-## Part B — Deploy the Frontend on Vercel
+## Part B - Deploy the Frontend on Vercel
 
-### Step 5 — Add `vercel.json` for SPA routing
+### Step 5 - Add `vercel.json` for SPA routing
 
 Without this, refreshing any route (e.g. `/store`) returns a 404.
 
@@ -103,7 +103,7 @@ git commit -m "add vercel SPA rewrite for frontend"
 git push
 ```
 
-### Step 6 — Import the frontend on Vercel
+### Step 6 - Import the frontend on Vercel
 
 1. Go to [vercel.com/new](https://vercel.com/new) → import the same repo again
 2. Set **Root Directory** to `frontend`
@@ -116,7 +116,7 @@ git push
 
 5. Click **Deploy**
 
-### Step 7 — Update `CLIENT_ORIGIN` on the Backend
+### Step 7 - Update `CLIENT_ORIGIN` on the Backend
 
 Go to your **backend** Vercel project → **Settings → Environment Variables** and set:
 
@@ -128,7 +128,7 @@ Then go to **Deployments → Redeploy** (uncheck "Use existing Build Cache").
 
 ---
 
-## MongoDB Atlas — Allow All IPs
+## MongoDB Atlas - Allow All IPs
 
 Vercel's serverless IPs change constantly, so allow all connections:
 
@@ -137,9 +137,9 @@ Vercel's serverless IPs change constantly, so allow all connections:
 
 ---
 
-## ⚠️ Image Uploads — Cloudinary Required
+## ⚠️ Image Uploads - Cloudinary Required
 
-Vercel is stateless — files saved to disk (`/uploads`) are lost after each function call. You **must** use Cloudinary for product image storage. See the Cloudinary setup guide when ready.
+Vercel is stateless - files saved to disk (`/uploads`) are lost after each function call. You **must** use Cloudinary for product image storage. See the Cloudinary setup guide when ready.
 
 ---
 

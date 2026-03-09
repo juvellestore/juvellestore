@@ -110,7 +110,7 @@ export const verifyPayment = async (req, res) => {
     const isAuthentic = expectedSignature === razorpaySignature;
 
     if (isAuthentic) {
-      // Re-fetch cart items (still present — only cleared after verify)
+      // Re-fetch cart items (still present - only cleared after verify)
       const cartItems = await CartItem.find({ userId: req.user._id }).populate(
         "productId",
       );
@@ -163,7 +163,7 @@ export const verifyPayment = async (req, res) => {
                 stockQuantity: {
                   $cond: [
                     { $eq: ["$stockQuantity", null] },
-                    null, // unlimited — don't touch
+                    null, // unlimited - don't touch
                     {
                       $max: [
                         0,

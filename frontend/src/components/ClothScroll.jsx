@@ -33,19 +33,23 @@ function drawFrame(canvas, image) {
   const ih = image.naturalHeight;
   if (!iw || !ih) return;
 
-  // Best-quality interpolation - critical for 1280-720 source images
+  // Best-quality interpolation, but omit "high" quality to significantly reduce lag
   ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
+
+  const dpr =
+    typeof window !== "undefined"
+      ? Math.min(window.devicePixelRatio || 1, 2)
+      : 1;
+  const actualNudge = NUDGE_PX * dpr;
 
   // Cover: fill full screen, crop excess
   const coverScale = Math.max(cw / iw, ch / ih);
-  // Minimum scale that guarantees NUDGE_PX horizontal excess on each side.
-  // Derived from: (iw * minScale - cw) / 2 >= NUDGE_PX
-  const minScale = (cw + 2 * NUDGE_PX) / iw;
+  // Minimum scale that guarantees actualNudge horizontal excess on each side.
+  const minScale = (cw + 2 * actualNudge) / iw;
   const scale = Math.max(coverScale, minScale) * 1.005; // tiny safety buffer
 
-  // Shift image right by NUDGE_PX to centre the dress in the frame.
-  const x = (cw - iw * scale) / 2 + NUDGE_PX;
+  // Shift image right by actualNudge to centre the dress in the frame.
+  const x = (cw - iw * scale) / 2 + actualNudge;
   const y = (ch - ih * scale) / 2;
 
   ctx.clearRect(0, 0, cw, ch);
@@ -63,47 +67,44 @@ const styles = {
     textTransform: "uppercase",
     color: "#e8c8d8",
     margin: 0,
-    textShadow: "0 1px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.8)",
+    textShadow: "0 1px 4px rgba(85,56,88,0.5)",
   },
   heroTitle: {
-    fontFamily: "'Anton', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: "clamp(2.4rem, 7vw, 5.5rem)",
+    fontWeight: 600,
     lineHeight: 1.0,
-    letterSpacing: "0.02em",
+    letterSpacing: "-0.02em",
     color: "#ffffff",
     margin: "0.35rem 0 0",
     textShadow:
-      "0 2px 4px rgba(0,0,0,0.95)," +
-      "0 4px 16px rgba(0,0,0,0.85)," +
-      "0 8px 40px rgba(0,0,0,0.7)," +
-      "0 0 60px rgba(207,157,184,0.35)",
+      "0 2px 6px rgba(85, 56, 88, 0.5), 0 4px 12px rgba(85, 56, 88, 0.3)",
   },
   sectionTitle: {
-    fontFamily: "'Anton', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: "clamp(1.9rem, 5vw, 4rem)",
+    fontWeight: 600,
     lineHeight: 1.05,
-    letterSpacing: "0.02em",
+    letterSpacing: "-0.02em",
     color: "#ffffff",
     margin: "0.35rem 0 0",
     textShadow:
-      "0 2px 4px rgba(0,0,0,0.95)," +
-      "0 4px 16px rgba(0,0,0,0.85)," +
-      "0 8px 40px rgba(0,0,0,0.7)," +
-      "0 0 40px rgba(207,157,184,0.3)",
+      "0 2px 6px rgba(85, 56, 88, 0.5), 0 4px 12px rgba(85, 56, 88, 0.3)",
   },
   ctaTitle: {
-    fontFamily: "'Anton', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: "clamp(3.5rem, 11vw, 8rem)",
+    fontWeight: 600,
     lineHeight: 0.95,
-    letterSpacing: "0.15em",
+    letterSpacing: "0.04em",
     textTransform: "uppercase",
     color: "#ffffff",
     margin: "0.35rem 0",
     textShadow:
-      "0 2px 4px rgba(0,0,0,0.95)," +
-      "0 4px 20px rgba(0,0,0,0.85)," +
-      "0 8px 60px rgba(0,0,0,0.7)," +
-      "0 0 80px rgba(207,157,184,0.45)",
+      "0 2px 4px rgba(0,0,0,0.8)," +
+      "0 4px 12px rgba(0,0,0,0.6)," +
+      "0 8px 30px rgba(0,0,0,0.4)," +
+      "0 0 50px rgba(207,157,184,0.3)",
   },
   tagline: {
     fontFamily: "'Poppins', sans-serif",
@@ -113,12 +114,12 @@ const styles = {
     color: "#e8c8d8",
     letterSpacing: "0.1em",
     margin: "0.2rem 0 0",
-    textShadow: "0 1px 8px rgba(0,0,0,0.9)",
+    textShadow: "0 1px 4px rgba(85,56,88,0.5)",
   },
 };
 
 // ─── Text-overlay data ────────────────────────────────────────────────────────
-// All positioning is done 100% via inline styles — no Tailwind transforms.
+// All positioning is done 100% via inline styles - no Tailwind transforms.
 const OVERLAYS = [
   {
     id: "scrollDown",
@@ -207,6 +208,62 @@ const OVERLAYS = [
   },
 ];
 
+// ─── CTA Button Component ─────────────────────────────────────────────────────
+function CTAButton() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      to="/store"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "0.6rem",
+        padding: "0.9rem 2.4rem",
+        marginTop: "0.5rem",
+        border: "1.5px solid rgba(207,157,184,1)",
+        backgroundColor: isHovered
+          ? "rgba(207,157,184,0.90)"
+          : "rgba(207,157,184,0.70)",
+        borderRadius: "2px",
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "clamp(0.7rem, 1.5vw, 0.82rem)",
+        fontWeight: 600,
+        letterSpacing: "0.22em",
+        textTransform: "uppercase",
+        color: "#ffffff",
+        textDecoration: "none",
+        pointerEvents: "auto",
+        cursor: "pointer",
+        boxShadow: isHovered
+          ? "0 0 44px rgba(207,157,184,0.4), 0 6px 22px rgba(207,157,184,0.25), inset 0 0 0 1px rgba(255,255,255,0.2)"
+          : "0 0 28px rgba(207,157,184,0.25), 0 4px 14px rgba(207,157,184,0.15), inset 0 0 0 1px rgba(255,255,255,0.14)",
+        transform: isHovered ? "translateY(-3px)" : "translateY(0)",
+        transition:
+          "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span>Visit Store</span>
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M17 8l4 4m0 0l-4 4m4-4H3"
+        />
+      </svg>
+    </Link>
+  );
+}
+
 // ─── Overlay wrapper ──────────────────────────────────────────────────────────
 function TextOverlay({ overlay, scrollYProgress }) {
   const opacity = useTransform(
@@ -229,11 +286,11 @@ function TextOverlay({ overlay, scrollYProgress }) {
         display: "flex",
         flexDirection: "column",
         maxWidth: "min(520px, 88vw)",
-        pointerEvents: "none",
+        pointerEvents: overlay.isCTA ? "auto" : "none",
         ...overlay.style,
       }}
     >
-      {/* Dark frosted scrim — ensures text reads on any frame */}
+      {/* Dark frosted scrim - ensures text reads on any frame */}
       <div>
         {overlay.isScrollDown ? (
           <div
@@ -308,64 +365,7 @@ function TextOverlay({ overlay, scrollYProgress }) {
             }}
           >
             <h2 style={styles.ctaTitle}>Juvelle</h2>
-            <Link
-              to="/store"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.6rem",
-                padding: "0.9rem 2.4rem",
-                marginTop: "0.5rem",
-                border: "1.5px solid rgba(207,157,184,1)",
-                background: "rgba(207,157,184,0.45)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
-                borderRadius: "2px",
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "clamp(0.7rem, 1.5vw, 0.82rem)",
-                fontWeight: 600,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "#ffffff",
-                textDecoration: "none",
-                pointerEvents: "all",
-                cursor: "pointer",
-                boxShadow:
-                  "0 0 28px rgba(207,157,184,0.25), 0 4px 14px rgba(207,157,184,0.15), inset 0 0 0 1px rgba(255,255,255,0.14)",
-                transition:
-                  "background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(207,157,184,0.65)";
-                e.currentTarget.style.borderColor = "rgba(207,157,184,1)";
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 44px rgba(207,157,184,0.4), 0 6px 22px rgba(207,157,184,0.25), inset 0 0 0 1px rgba(255,255,255,0.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(207,157,184,0.45)";
-                e.currentTarget.style.borderColor = "rgba(207,157,184,1)";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 0 28px rgba(207,157,184,0.25), 0 4px 14px rgba(207,157,184,0.15), inset 0 0 0 1px rgba(255,255,255,0.14)";
-              }}
-            >
-              <span>Visit Store</span>
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </Link>
+            <CTAButton />
           </div>
         ) : (
           overlay.content
@@ -572,18 +572,17 @@ export default function ClothScroll() {
     });
   }, []);
 
-  // ── Canvas resize — simple: canvas.width = CSS px (no DPR scaling) ──────
-  // getBoundingClientRect gives the ACTUAL CSS pixel size of the canvas.
-  // window.innerHeight ≠ 100vh on mobile (toolbar changes innerHeight but
-  // 100vh stays fixed), so using innerHeight caused a buffer/display size
-  // mismatch that made the browser stretch the canvas itself — adding blur
-  // ON TOP of the image scaling. This fixes that second layer of blur.
+  // ── Canvas resize ───────────────────────────────────────────────────────
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const w = Math.round(rect.width);
-    const h = Math.round(rect.height);
+    const dpr =
+      typeof window !== "undefined"
+        ? Math.min(window.devicePixelRatio || 1, 2)
+        : 1;
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
     if (!w || !h) return;
     // Only reset buffer if size actually changed (avoids unnecessary clear)
     if (canvas.width !== w || canvas.height !== h) {
@@ -639,7 +638,7 @@ export default function ClothScroll() {
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <>
-      {/* Scoped keyframes — keeps all ClothScroll CSS out of index.css */}
+      {/* Scoped keyframes - keeps all ClothScroll CSS out of index.css */}
       <style>{`
         @keyframes cloth-spin {
           to { transform: rotate(360deg); }
@@ -667,7 +666,7 @@ export default function ClothScroll() {
           marginTop: 0,
         }}
       >
-        {/* Sticky full-viewport panel — plain 100vh, canvas sizes via window.innerHeight */}
+        {/* Sticky full-viewport panel - plain 100vh, canvas sizes via window.innerHeight */}
         <div
           style={{
             position: "sticky",
@@ -705,7 +704,7 @@ export default function ClothScroll() {
               zIndex: 5,
             }}
           />
-          {/* Bottom — extended to 40% to mask any mobile sub-pixel gap */}
+          {/* Bottom - extended to 40% to mask any mobile sub-pixel gap */}
           <div
             style={{
               position: "absolute",
