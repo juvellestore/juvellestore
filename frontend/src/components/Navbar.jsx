@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 import AuthModal from "./AuthModal.jsx";
+import logo from "../assets/logo_ivory-blush.svg";
 
 const NAV_LINKS = [
   { label: "Home", to: "/" },
@@ -61,7 +62,16 @@ const Navbar = () => {
               {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
             <div className="text-ivory-blush font-montserrat text-xl sm:text-2xl font-bold tracking-wide">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2"
+              >
+                <img
+                  src={logo}
+                  alt="Juvelle Logo"
+                  className="h-6 sm:h-8 w-auto"
+                />
                 Juvelle
               </Link>
             </div>

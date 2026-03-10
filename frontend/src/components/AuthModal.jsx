@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiX, FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext.jsx";
+import logo from "../assets/logo_ivory-blush.svg";
 
 // Reusable password input with show/hide eye toggle
 const PasswordInput = ({
@@ -132,9 +133,12 @@ const AuthModal = ({ isOpen, onClose }) => {
               <div className="bg-midnight-truffle border border-velvet-rose-mist/30 rounded-xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-ivory-blush font-montserrat font-bold text-xl m-0">
-                    Juvelle
-                  </h2>
+                  <div className="flex items-center gap-2">
+                    <img src={logo} alt="Juvelle Logo" className="h-6 w-auto" />
+                    <h2 className="text-ivory-blush font-montserrat font-bold text-xl m-0">
+                      Juvelle
+                    </h2>
+                  </div>
                   <button
                     onClick={onClose}
                     className="text-velvet-rose-mist bg-transparent border-none cursor-pointer p-1 hover:text-ivory-blush transition-colors"
