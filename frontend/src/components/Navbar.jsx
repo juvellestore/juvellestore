@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FiShoppingCart,
@@ -25,6 +25,21 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navbarRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        mobileMenuOpen &&
+        navbarRef.current &&
+        !navbarRef.current.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [mobileMenuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -34,7 +49,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="w-full relative z-[60]">
+      <div className="w-full relative z-[60]" ref={navbarRef}>
         <nav className="w-full bg-royal-plum-veil flex items-center justify-between px-4 sm:px-5 py-3 relative z-[61]">
           {/* Left Side: Burger Menu + Brand */}
           <div className="flex items-center gap-3">

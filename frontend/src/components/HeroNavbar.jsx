@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const NAV_LINKS = [
@@ -10,6 +10,8 @@ const NAV_LINKS = [
 
 const HeroNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef(null);
+  const drawerRef = useRef(null);
 
   // Close mobile menu if window resizes to desktop width
   useEffect(() => {
@@ -20,10 +22,31 @@ const HeroNavbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const clickedInNav =
+        navRef.current && navRef.current.contains(event.target);
+      const clickedInDrawer =
+        drawerRef.current && drawerRef.current.contains(event.target);
+      const isOverlay = event.target === drawerRef.current;
+
+      if (mobileOpen && !clickedInNav) {
+        if (!clickedInDrawer || isOverlay) {
+          setMobileOpen(false);
+        }
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [mobileOpen]);
+
   return (
     <>
       {/* ── Top bar ───────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-[9000] flex items-center justify-between px-5 py-4 md:px-10 md:py-5 bg-transparent w-full">
+      <nav
+        ref={navRef}
+        className="fixed top-0 left-0 right-0 z-[9000] flex items-center justify-between px-5 py-4 md:px-10 md:py-5 bg-transparent w-full"
+      >
         {/* Brand */}
         <Link
           to="/"
@@ -51,6 +74,7 @@ const HeroNavbar = () => {
 
       {/* ── Mobile full-screen drawer ─────────────────────────────────────── */}
       <div
+        ref={drawerRef}
         className={`fixed inset-0 z-[8999] flex flex-col items-center justify-center gap-10 bg-midnight-truffle/95 backdrop-blur-xl transition-all duration-350 ease-in-out md:hidden ${
           mobileOpen
             ? "opacity-100 pointer-events-auto translate-y-0"

@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 export const generateBillingPDF = (order) => {
   const doc = new jsPDF();
@@ -47,7 +47,7 @@ export const generateBillingPDF = (order) => {
     `Rs. ${(item.priceAtOrder * item.quantity).toLocaleString("en-IN")}`,
   ]);
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: 85,
     head: [["Product Name", "Size", "Qty", "Unit Price", "Total"]],
     body: tableData,
