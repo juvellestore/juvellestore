@@ -1,7 +1,6 @@
 ### To-dos
 
 - Test (mobile + PC)
-- Bill PDF generation
-- Shipping label PDF generation
+- Out of scope close navbar
 - New layout
 - New logo

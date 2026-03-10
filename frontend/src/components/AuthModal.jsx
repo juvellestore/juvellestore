@@ -127,7 +127,7 @@ const AuthModal = ({ isOpen, onClose }) => {
               exit={{ opacity: 0, scale: 0.92, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[400px] z-51"
+              className="relative w-full max-w-[400px] z-51"
             >
               <div className="bg-midnight-truffle border border-velvet-rose-mist/30 rounded-xl p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
                 {/* Header */}

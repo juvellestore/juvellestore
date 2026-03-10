@@ -68,23 +68,22 @@ const Navbar = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-2 sm:gap-3 text-ivory-blush">
-            {/* Cart icon */}
-            <Link
-              to="/cart"
-              className="relative p-2 hover:bg-ivory-blush hover:text-royal-plum-veil rounded-sm transition duration-200"
-              title="Cart"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <FiShoppingCart size={20} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-velvet-rose-mist text-midnight-truffle text-[10px] sm:text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-inter">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              )}
-            </Link>
-
             {user ? (
               <>
+                {/* Cart icon */}
+                <Link
+                  to="/cart"
+                  className="relative p-2 hover:bg-ivory-blush hover:text-royal-plum-veil rounded-sm transition duration-200"
+                  title="Cart"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <FiShoppingCart size={20} />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-velvet-rose-mist text-midnight-truffle text-[10px] sm:text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center font-inter">
+                      {cartCount > 99 ? "99+" : cartCount}
+                    </span>
+                  )}
+                </Link>
                 {/* Profile */}
                 <Link
                   to="/profile"

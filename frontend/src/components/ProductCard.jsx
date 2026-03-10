@@ -56,7 +56,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
       whileHover={{ y: -4 }}
-      className="relative cursor-pointer"
+      className="relative cursor-pointer h-full"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
@@ -65,7 +65,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
     >
       <div
         onClick={handleCardClick}
-        className="bg-cocoa-orchid rounded-lg overflow-hidden border border-velvet-rose-mist/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow duration-200"
+        className="bg-cocoa-orchid rounded-lg overflow-hidden border border-velvet-rose-mist/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-shadow duration-200 h-full flex flex-col"
       >
         {/* Image */}
         <div className="relative aspect-3/4 overflow-hidden bg-midnight-truffle">
@@ -105,7 +105,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
         </div>
 
         {/* Info */}
-        <div className="p-3.5">
+        <div className="p-3.5 flex flex-col flex-1">
           <h3 className="m-0 mb-1 text-ivory-blush font-montserrat font-semibold text-[0.875rem] leading-tight overflow-hidden line-clamp-2">
             {product.productName}
           </h3>
@@ -121,6 +121,8 @@ const ProductCard = ({ product, onOpenAuth }) => {
             )}
           </div>
 
+          <div className="flex-1"></div>
+
           {/* Stock Info */}
           {product.inStock &&
             product.stockQuantity !== undefined &&
@@ -128,7 +130,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
               <div className="mb-3">
                 <span
                   className={`text-[0.75rem] font-inter font-medium px-2 py-0.5 rounded-sm ${
-                    product.stockQuantity <= 5
+                    product.stockQuantity <= 1
                       ? "bg-red-500/10 text-red-400 border border-red-500/20"
                       : "bg-green-500/10 text-green-400 border border-green-500/20"
                   }`}
@@ -139,7 +141,7 @@ const ProductCard = ({ product, onOpenAuth }) => {
             )}
 
           {/* Add to cart button */}
-          <div className="relative">
+          <div className="relative mt-auto">
             <button
               onClick={handleAddToCart}
               disabled={adding || !product.inStock}

@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import api from "../api/axios.js";
+import { generateBillingPDF, generateShippingPDF } from "../utils/pdfUtils.js";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const imgUrl = (img) =>
@@ -686,6 +687,28 @@ const AdminDashboard = () => {
                             </span>
                           </div>
                         ))}
+
+                        {/* PDF Actions */}
+                        <div className="flex gap-3 mt-4 pt-4 border-t border-velvet-rose-mist/10">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              generateBillingPDF(order);
+                            }}
+                            className="flex-1 bg-royal-plum-veil text-ivory-blush border-none rounded-sm py-2 font-montserrat font-semibold text-[0.85rem] cursor-pointer hover:bg-royal-plum-veil/90 transition-colors"
+                          >
+                            Generate Billing PDF
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              generateShippingPDF(order);
+                            }}
+                            className="flex-1 bg-cocoa-orchid text-ivory-blush border-none rounded-sm py-2 font-montserrat font-semibold text-[0.85rem] cursor-pointer hover:bg-cocoa-orchid/90 transition-colors"
+                          >
+                            Generate Shipping Label
+                          </button>
+                        </div>
                       </motion.div>
                     )}
                   </div>

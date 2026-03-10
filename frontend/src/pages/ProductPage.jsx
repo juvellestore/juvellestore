@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FiShoppingCart,
   FiArrowLeft,
@@ -241,7 +241,7 @@ const ProductPage = () => {
                     product.stockQuantity !== null && (
                       <span
                         className={`text-xs font-inter font-medium px-2 py-0.5 rounded-sm border ${
-                          product.stockQuantity <= 5
+                          product.stockQuantity <= 1
                             ? "bg-red-500/10 text-red-400 border-red-500/30"
                             : "bg-green-500/10 text-green-400 border-green-500/30"
                         }`}
