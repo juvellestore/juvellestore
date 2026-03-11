@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { FiPackage } from "react-icons/fi";
+import { FiPackage, FiSearch } from "react-icons/fi";
 import { toast } from "sonner";
 import api from "../api/axios.js";
 import ProductCard from "./ProductCard.jsx";
@@ -37,12 +37,25 @@ const Store = ({ onOpenAuth }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("newest");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await api.get(`/api/products?sort=${sort}`);
+        const queryParams = new URLSearchParams({ sort });
+        if (debouncedSearch) {
+          queryParams.append("search", debouncedSearch);
+        }
+        const res = await api.get(`/api/products?${queryParams.toString()}`);
         setProducts(res.data.products || []);
       } catch {
         toast.error("Failed to load products");
@@ -51,13 +64,13 @@ const Store = ({ onOpenAuth }) => {
       }
     };
     fetchProducts();
-  }, [sort]);
+  }, [sort, debouncedSearch]);
 
   return (
     <div className="min-h-[calc(100vh-53px)] px-4 py-8 sm:px-6 w-full bg-midnight-truffle">
       <div className="max-w-[1200px] mx-auto w-full">
-        {/* Header + Sort */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        {/* Header + Controls */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 w-full">
           <div>
             <h1 className="text-ivory-blush font-montserrat font-bold text-[clamp(1.5rem,4vw,2rem)] m-0 tracking-[-0.02em]">
               Our Collection
@@ -69,8 +82,21 @@ const Store = ({ onOpenAuth }) => {
             </p>
           </div>
 
-          {/* Sort buttons */}
-          <div className="flex gap-1.5 flex-wrap">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full lg:w-auto">
+            {/* Search Bar */}
+            <div className="relative w-full sm:w-64 shrink-0">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-transparent border border-velvet-rose-mist/30 rounded-full text-ivory-blush placeholder:text-velvet-rose-mist/60 focus:outline-none focus:border-royal-plum-veil transition-colors font-poppins text-sm"
+              />
+              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-velvet-rose-mist/80" size={16} />
+            </div>
+
+            {/* Sort buttons */}
+            <div className="flex gap-1.5 flex-wrap">
             {SORT_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -84,6 +110,7 @@ const Store = ({ onOpenAuth }) => {
                 {opt.label}
               </button>
             ))}
+            </div>
           </div>
         </div>
 

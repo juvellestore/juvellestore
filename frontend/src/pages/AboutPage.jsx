@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar.jsx";
+import { FiInstagram, FiFacebook } from "react-icons/fi";
 
 const AboutPage = () => {
   return (
@@ -63,6 +64,27 @@ const AboutPage = () => {
                 >
                   juvelle.store@gmail.com
                 </a>
+              </li>
+              <li className="m-0 mt-2">
+                <strong className="text-velvet-rose-mist mb-2 block">Social Media:</strong>
+                <div className="flex gap-4">
+                  <a
+                    href="https://www.instagram.com/juvelle.store/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-ivory-blush no-underline hover:text-royal-plum-veil transition-colors"
+                  >
+                    <FiInstagram size={20} /> Instagram
+                  </a>
+                  <a
+                    href="https://www.facebook.com/people/JuvelleStore/61586948523920"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-ivory-blush no-underline hover:text-royal-plum-veil transition-colors"
+                  >
+                    <FiFacebook size={20} /> Facebook
+                  </a>
+                </div>
               </li>
             </ul>
           </div>

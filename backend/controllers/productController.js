@@ -22,13 +22,24 @@ const uploadToCloudinary = (buffer) =>
 
 // GET /api/products
 export const getProducts = async (req, res) => {
-  const { sort } = req.query;
+  const { sort, search } = req.query;
   let sortOption = { createdAt: -1 };
   if (sort === "price_asc") sortOption = { price: 1 };
   else if (sort === "price_desc") sortOption = { price: -1 };
   else if (sort === "featured") sortOption = { featured: -1, createdAt: -1 };
 
-  const products = await Product.find().sort(sortOption);
+  let query = {};
+  if (search) {
+    query = {
+      $or: [
+        { productName: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } }
+      ],
+    };
+  }
+
+  const products = await Product.find(query).sort(sortOption);
   res.json({ success: true, products });
 };
 
