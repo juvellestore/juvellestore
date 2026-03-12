@@ -1,8 +1,8 @@
 # Juvelle - Deployment Guide
 
-**Backend** → [Vercel](https://vercel.com) (serverless Node.js, always-on)
-**Frontend** → [Vercel](https://vercel.com) (static Vite/React)
-**Images** → [Cloudinary](https://cloudinary.com) _(to be set up separately)_
+- **Backend** → [Vercel](https://vercel.com) (serverless Node.js, always-on)
+- **Frontend** → [Vercel](https://vercel.com) (static Vite/React)
+- **Images** → [Cloudinary](https://cloudinary.com) _(to be set up separately)_
 
 ---
 
@@ -20,7 +20,7 @@
 git init
 git add .
 git commit -m "initial commit"
-git remote add origin <repo_git_url>
+git remote add origin <repository_url>
 git push -u origin main
 ```
 
@@ -60,12 +60,18 @@ git push
 6. Output Directory: _(leave blank)_
 7. Before clicking Deploy, go to **Environment Variables** and add:
 
-| Variable        | Value                                                              |
-| --------------- | ------------------------------------------------------------------ |
-| `MONGODB_URI`   | your full Atlas connection string                                  |
-| `JWT_SECRET`    | your secret key                                                    |
-| `NODE_ENV`      | `production`                                                       |
-| `CLIENT_ORIGIN` | _(your frontend Vercel URL - add after Step 6, no trailing slash)_ |
+| Variable                | Value                                                              |
+| ----------------------- | ------------------------------------------------------------------ |
+| `MONGODB_URI`           | your full Atlas connection string                                  |
+| `JWT_SECRET`            | your secret key                                                    |
+| `NODE_ENV`              | `production`                                                       |
+| `CLIENT_ORIGIN`         | _(your frontend Vercel URL - add after Step 6, no trailing slash)_ |
+| `PORT`                  | `5000` _(optional on Vercel)_                                      |
+| `RAZORPAY_KEY_ID`       | your Razorpay Key ID                                               |
+| `RAZORPAY_KEY_SECRET`   | your Razorpay Key Secret                                           |
+| `CLOUDINARY_CLOUD_NAME` | your Cloudinary Cloud Name                                         |
+| `CLOUDINARY_API_KEY`    | your Cloudinary API Key                                            |
+| `CLOUDINARY_API_SECRET` | your Cloudinary API Secret                                         |
 
 8. Click **Deploy**
 
@@ -110,9 +116,10 @@ git push
 3. Framework Preset: **Vite** (auto-detected)
 4. Before clicking Deploy, add **Environment Variables**:
 
-| Variable       | Value                                                                 |
-| -------------- | --------------------------------------------------------------------- |
-| `VITE_API_URL` | `https://juvelle-backend.vercel.app` (from Step 4, no trailing slash) |
+| Variable               | Value                                                                 |
+| ---------------------- | --------------------------------------------------------------------- |
+| `VITE_API_URL`         | `https://juvelle-backend.vercel.app` (from Step 4, no trailing slash) |
+| `VITE_RAZORPAY_KEY_ID` | your Razorpay Key ID                                                  |
 
 5. Click **Deploy**
 
