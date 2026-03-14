@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
@@ -104,57 +104,12 @@ const ProductPage = () => {
           <FiArrowLeft size={16} /> Back to Collection
         </Link>
 
-        {/* Mobile Image Carousel */}
-        {images.length > 0 && (
-          <div className="md:hidden relative w-full aspect-3/4 group mb-8">
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={mainImg}
-                src={images[mainImg]}
-                alt={product.productName}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0 w-full h-full object-cover rounded-lg"
-              />
-            </AnimatePresence>
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-midnight-truffle/60 border border-velvet-rose-mist/30 text-ivory-blush flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <FiChevronLeft size={24} />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-midnight-truffle/60 border border-velvet-rose-mist/30 text-ivory-blush flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <FiChevronRight size={24} />
-                </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {images.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        i === mainImg
-                          ? "bg-ivory-blush"
-                          : "bg-velvet-rose-mist/50"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        )}
+
 
         <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-12 items-start w-full">
           {/* Image gallery */}
-          <div className="hidden md:block">
+          <div className="w-full">
             {" "}
-            {/* Hide on mobile */}
             <motion.div
               key={mainImg}
               initial={{ opacity: 0 }}
@@ -166,7 +121,7 @@ const ProductPage = () => {
                 <img
                   src={images[mainImg]}
                   alt={product.productName}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -192,7 +147,7 @@ const ProductPage = () => {
                     <img
                       src={img}
                       alt=""
-                      className="w-full aspect-3/4 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                      className="w-full h-full aspect-3/4 object-contain cursor-pointer hover:opacity-90 transition-opacity"
                     />
                   </button>
                 ))}

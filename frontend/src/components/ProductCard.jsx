@@ -98,24 +98,24 @@ const ProductCard = ({ product, onOpenAuth }) => {
 
           {/* Featured badge */}
           {product.featured && (
-            <div className="absolute top-2 left-2 bg-royal-plum-veil/85 backdrop-blur-xs text-ivory-blush text-[0.65rem] font-inter font-semibold px-2 py-0.5 rounded-[20px] tracking-[0.05em] uppercase">
+            <div className="absolute top-2 left-2 bg-royal-plum-veil/85 backdrop-blur-xs text-ivory-blush text-[0.55rem] sm:text-[0.65rem] font-inter font-semibold px-1.5 sm:px-2 py-0.5 rounded-[20px] tracking-[0.05em] uppercase">
               Featured
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="p-3.5 flex flex-col flex-1">
-          <h3 className="m-0 mb-1 text-ivory-blush font-montserrat font-semibold text-[0.875rem] leading-tight overflow-hidden line-clamp-2">
+        <div className="p-2.5 sm:p-3.5 flex flex-col flex-1">
+          <h3 className="m-0 mb-1 text-ivory-blush font-montserrat font-semibold text-[0.75rem] sm:text-[0.875rem] leading-tight overflow-hidden line-clamp-2">
             {product.productName}
           </h3>
 
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-ivory-blush font-montserrat font-bold text-base">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+            <span className="text-ivory-blush font-montserrat font-bold text-sm sm:text-base">
               ₹{product.price.toLocaleString("en-IN")}
             </span>
             {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-velvet-rose-mist font-poppins text-xs line-through">
+              <span className="text-velvet-rose-mist font-poppins text-[0.65rem] sm:text-xs line-through">
                 ₹{product.originalPrice.toLocaleString("en-IN")}
               </span>
             )}
@@ -123,29 +123,12 @@ const ProductCard = ({ product, onOpenAuth }) => {
 
           <div className="flex-1"></div>
 
-          {/* Stock Info */}
-          {product.inStock &&
-            product.stockQuantity !== undefined &&
-            product.stockQuantity !== null && (
-              <div className="mb-3">
-                <span
-                  className={`text-[0.75rem] font-inter font-medium px-2 py-0.5 rounded-sm ${
-                    product.stockQuantity <= 1
-                      ? "bg-red-500/10 text-red-400 border border-red-500/20"
-                      : "bg-green-500/10 text-green-400 border border-green-500/20"
-                  }`}
-                >
-                  {product.stockQuantity} in stock
-                </span>
-              </div>
-            )}
-
           {/* Add to cart button */}
           <div className="relative mt-auto">
             <button
               onClick={handleAddToCart}
               disabled={adding || !product.inStock}
-              className={`w-full border border-velvet-rose-mist/30 rounded-sm p-2 font-inter font-medium text-[0.8rem] transition-colors duration-200 flex items-center justify-center gap-1.5 ${
+              className={`w-full border border-velvet-rose-mist/30 rounded-sm p-1.5 sm:p-2 font-inter font-medium text-[0.7rem] sm:text-[0.8rem] transition-colors duration-200 flex items-center justify-center gap-1 sm:gap-1.5 ${
                 product.inStock
                   ? "bg-royal-plum-veil/90 text-ivory-blush cursor-pointer hover:bg-royal-plum-veil"
                   : "bg-cocoa-orchid text-velvet-rose-mist cursor-not-allowed"
